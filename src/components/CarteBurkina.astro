@@ -1,0 +1,176 @@
+---
+// Le Burkina Faso découpé dans les couleurs du drapeau. Contour réel (Natural Earth).
+// Ouagadougou est presque au centre du pays : l'étoile du drapeau tombe dessus.
+import carte from '../data/burkina-carte.json';
+
+const { largeur, hauteur, contour, ouagadougou } = carte;
+const [ox, oy] = ouagadougou;
+
+const etoile = (cx: number, cy: number, r: number) =>
+  Array.from({ length: 10 }, (_, i) => {
+    const rayon = i % 2 === 0 ? r : r * 0.382;
+    const angle = (Math.PI / 5) * i - Math.PI / 2;
+    return `${(cx + rayon * Math.cos(angle)).toFixed(1)},${(cy + rayon * Math.sin(angle)).toFixed(1)}`;
+  }).join(' ');
+
+const trajet = `M${ox + 40} ${oy - 34}C640 210 820 40 1012 -84`;
+---
+
+<figure class="decoupe" data-revele="decoupe">
+  <svg
+    viewBox={`-30 -170 ${largeur + 110} ${hauteur + 215}`}
+    role="img"
+    aria-label="La carte du Burkina Faso découpée dans le rouge et le vert du drapeau, avec l’étoile dorée sur Ouagadougou et un avion en papier qui s’envole."
+  >
+    <defs>
+      <clipPath id="bf-contour"><path d={contour}></path></clipPath>
+      <mask id="bf-trace" maskUnits="userSpaceOnUse" x="400" y="-170" width="760" height="600">
+        <path class="decoupe__trace" d={trajet} pathLength="1"></path>
+      </mask>
+    </defs>
+
+    <path class="decoupe__socle" d={contour} transform="translate(14 20)"></path>
+
+    <g class="decoupe__piece decoupe__piece--rouge">
+      <g clip-path="url(#bf-contour)"><rect width={largeur} height={oy}></rect></g>
+    </g>
+    <g class="decoupe__piece decoupe__piece--vert">
+      <g clip-path="url(#bf-contour)"><rect y={oy} width={largeur} height={hauteur - oy}></rect></g>
+    </g>
+    <polygon class="decoupe__piece decoupe__etoile" points={etoile(ox, oy, 74)}></polygon>
+
+    <path class="decoupe__trajet" d={trajet} mask="url(#bf-trace)"></path>
+    <g class="decoupe__avion" transform="translate(1012 -84) rotate(-24)">
+      <polygon class="pli-a" points="-34,-26 62,0 -14,0"></polygon>
+      <polygon class="pli-b" points="-14,0 62,0 -40,30"></polygon>
+      <polygon class="pli-c" points="-14,0 62,0 -6,14"></polygon>
+    </g>
+  </svg>
+  <figcaption class="main">Le pays des hommes intègres</figcaption>
+</figure>
+
+<style>
+  .decoupe {
+    position: relative;
+  }
+
+  svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  figcaption {
+    margin: -6px 0 0 34%;
+    color: var(--ciel);
+    font-size: 1.5rem;
+    transform: rotate(-2deg);
+  }
+
+  .decoupe__socle {
+    fill: var(--ciel);
+    transition: opacity 0.6s ease;
+  }
+
+  .decoupe__piece {
+    transform-box: fill-box;
+    transform-origin: center;
+    transition:
+      transform 0.9s cubic-bezier(0.2, 0.8, 0.2, 1),
+      opacity 0.5s ease;
+  }
+
+  .decoupe__piece--rouge {
+    fill: var(--rouge-bf);
+    filter: drop-shadow(0 3px 4px rgb(14 40 68 / 0.28));
+  }
+
+  .decoupe__piece--vert {
+    fill: var(--vert-bf);
+    filter: drop-shadow(0 -3px 3px rgb(14 40 68 / 0.3));
+    transition-delay: 0.08s;
+  }
+
+  .decoupe__etoile {
+    fill: var(--or-bf);
+    filter: drop-shadow(0 3px 3px rgb(14 40 68 / 0.4));
+    transition-delay: 0.42s;
+  }
+
+  .decoupe__trajet {
+    fill: none;
+    stroke: var(--azur);
+    stroke-width: 4.5;
+    stroke-linecap: round;
+    stroke-dasharray: 2 13;
+  }
+
+  .decoupe__trace {
+    fill: none;
+    stroke: #fff;
+    stroke-width: 14;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 0;
+    transition: stroke-dashoffset 1.3s 0.75s cubic-bezier(0.45, 0.05, 0.25, 1);
+  }
+
+  .decoupe__avion {
+    transition: opacity 0.3s 1.85s ease;
+  }
+
+  .pli-a {
+    fill: #fff;
+  }
+
+  .pli-b {
+    fill: var(--glacier);
+  }
+
+  .pli-c {
+    fill: var(--azur);
+  }
+
+  .decoupe__avion polygon {
+    stroke: var(--ciel);
+    stroke-width: 2;
+    stroke-linejoin: round;
+  }
+
+  /* Les pièces s'assemblent à l'arrivée à l'écran */
+  :global(.js) .decoupe:not(.vu) .decoupe__socle {
+    opacity: 0;
+  }
+
+  :global(.js) .decoupe:not(.vu) .decoupe__piece--rouge {
+    opacity: 0;
+    transform: translate(-4%, -9%) rotate(-3deg);
+  }
+
+  :global(.js) .decoupe:not(.vu) .decoupe__piece--vert {
+    opacity: 0;
+    transform: translate(4%, 9%) rotate(3deg);
+  }
+
+  :global(.js) .decoupe:not(.vu) .decoupe__etoile {
+    opacity: 0;
+    transform: scale(0.2) rotate(-70deg);
+  }
+
+  :global(.js) .decoupe:not(.vu) .decoupe__trace {
+    stroke-dashoffset: 1;
+  }
+
+  :global(.js) .decoupe:not(.vu) .decoupe__avion {
+    opacity: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .decoupe__piece,
+    .decoupe__trace,
+    .decoupe__avion,
+    .decoupe__socle {
+      transition: none;
+    }
+  }
+</style>

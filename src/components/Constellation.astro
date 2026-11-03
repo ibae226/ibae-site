@@ -1,6 +1,5 @@
 ---
 // Contour réel du Burkina Faso (Natural Earth), simplifié en constellation.
-// L'étoile dorée du drapeau marque Ouagadougou.
 import donnees from '../data/burkina-constellation.json';
 
 interface Props {
@@ -9,7 +8,7 @@ interface Props {
 }
 
 const { class: classe = '', anime = false } = Astro.props;
-const { largeur, hauteur, points, ouagadougou } = donnees;
+const { largeur, hauteur, points } = donnees;
 const marge = 30;
 const trace = `M${points.map(([x, y]) => `${x} ${y}`).join('L')}Z`;
 
@@ -40,8 +39,6 @@ const etoile = (cx: number, cy: number, r: number) => {
       />
     ))
   }
-  <circle class="constellation__halo" cx={ouagadougou[0]} cy={ouagadougou[1]} r="30"></circle>
-  <path class="constellation__or" d={etoile(ouagadougou[0], ouagadougou[1], 30)}></path>
 </svg>
 
 <style>
@@ -62,19 +59,6 @@ const etoile = (cx: number, cy: number, r: number) => {
     transform-box: fill-box;
     transform-origin: center;
     animation: scintiller 5s calc(var(--i) * -0.7s) ease-in-out infinite;
-  }
-
-  .constellation__or {
-    fill: var(--or-bf);
-  }
-
-  .constellation__halo {
-    fill: none;
-    stroke: var(--or-bf);
-    stroke-width: 2;
-    transform-box: fill-box;
-    transform-origin: center;
-    animation: onde 3.2s ease-out infinite;
   }
 
   .constellation--anime .constellation__trait {
@@ -98,17 +82,6 @@ const etoile = (cx: number, cy: number, r: number) => {
     50% {
       opacity: 0.45;
       transform: scale(0.72);
-    }
-  }
-
-  @keyframes onde {
-    from {
-      opacity: 0.9;
-      transform: scale(0.8);
-    }
-    to {
-      opacity: 0;
-      transform: scale(3.2);
     }
   }
 

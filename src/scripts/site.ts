@@ -1,4 +1,5 @@
 // Comportements du site. Tout le contenu reste lisible sans JavaScript.
+import { code128, texteCode128 } from './code128';
 
 const racine = document.documentElement;
 const calme = () =>
@@ -187,89 +188,6 @@ document.querySelectorAll<HTMLElement>('[data-carrousel]').forEach((racineC) => 
     }),
   );
 }
-
-/* Drapeau animé */
-document.querySelectorAll<HTMLElement>('[data-drapeau]').forEach((boite) => {
-  const toile = boite.querySelector('canvas');
-  const ctx = toile?.getContext('2d');
-  if (!toile || !ctx) return;
-
-  const motif = document.createElement('canvas');
-  motif.width = 900;
-  motif.height = 600;
-  const m = motif.getContext('2d')!;
-  m.fillStyle = '#ef2b2d';
-  m.fillRect(0, 0, 900, 300);
-  m.fillStyle = '#009e49';
-  m.fillRect(0, 300, 900, 300);
-  m.fillStyle = '#fcd116';
-  m.beginPath();
-  for (let i = 0; i < 10; i++) {
-    const r = i % 2 === 0 ? 105 : 40;
-    const a = (Math.PI / 5) * i - Math.PI / 2;
-    m[i ? 'lineTo' : 'moveTo'](450 + r * Math.cos(a), 300 + r * Math.sin(a));
-  }
-  m.closePath();
-  m.fill();
-
-  let visible = false;
-  let largeur = 0;
-  let hauteur = 0;
-
-  const dimensionner = () => {
-    const dpr = Math.min(devicePixelRatio || 1, 2);
-    largeur = boite.clientWidth;
-    hauteur = boite.clientHeight;
-    toile.width = largeur * dpr;
-    toile.height = hauteur * dpr;
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  };
-
-  const dessiner = (t: number) => {
-    ctx.clearRect(0, 0, largeur, hauteur);
-    const hampe = Math.max(5, largeur * 0.012);
-    const fl = largeur * 0.95;
-    const fh = fl * 0.66;
-    const y0 = hauteur * 0.07;
-    const x0 = hampe + 1;
-
-    const degrade = ctx.createLinearGradient(0, 0, hampe, 0);
-    degrade.addColorStop(0, '#9cc4de');
-    degrade.addColorStop(1, '#3e5873');
-    ctx.fillStyle = degrade;
-    ctx.fillRect(0, 0, hampe, hauteur);
-
-    const pas = 2;
-    for (let x = 0; x < fl; x += pas) {
-      const u = x / fl;
-      const phase = u * 7.5 - t * 2.1;
-      const ampleur = fh * 0.07 * Math.min(1, u * 2.4);
-      const dy = Math.sin(phase) * ampleur + Math.sin(phase * 0.47 + 1.3) * ampleur * 0.45;
-      ctx.drawImage(motif, u * 900, 0, (pas / fl) * 900 + 1, 600, x0 + x, y0 + dy, pas + 0.6, fh);
-      const lumiere = Math.cos(phase) * Math.min(1, u * 3);
-      ctx.fillStyle = lumiere > 0 ? `rgba(255,255,255,${lumiere * 0.16})` : `rgba(4,13,26,${-lumiere * 0.3})`;
-      ctx.fillRect(x0 + x, y0 + dy, pas + 0.6, fh);
-    }
-  };
-
-  const boucle = (ms: number) => {
-    if (visible) dessiner(ms / 1000);
-    if (visible && !calme()) requestAnimationFrame(boucle);
-  };
-
-  dimensionner();
-  boite.classList.add('active');
-  dessiner(1.2);
-  addEventListener('resize', () => {
-    dimensionner();
-    dessiner(1.2);
-  });
-  new IntersectionObserver(([e]) => {
-    const avant = visible;
-    visible = e.isIntersecting;
-    if (visible && !avant) requestAnimationFrame(boucle);
-  }).observe(boite);
-});
 
 /* La Terre : globe WebGL, déplaçable à la souris ou au doigt */
 document.querySelectorAll<HTMLElement>('[data-terre]').forEach((boite) => {
@@ -486,6 +404,17 @@ void main(){
   );
 }
 
+/* Carte d'embarquement : le tampon tombe et le talon se détache quand l'adhésion est envoyée */
+const embarquer = () => {
+  const carte = document.querySelector<HTMLElement>('[data-carte]');
+  if (!carte) return;
+  carte.classList.add('embarque');
+  const { top, bottom } = carte.getBoundingClientRect();
+  if (top < 0 || bottom > innerHeight) {
+    carte.scrollIntoView({ block: 'center', behavior: calme() ? 'auto' : 'smooth' });
+  }
+};
+
 /* Formulaires */
 document.querySelectorAll<HTMLFormElement>('form[data-formulaire]').forEach((f) => {
   const etat = f.querySelector<HTMLElement>('[data-etat]');
@@ -519,6 +448,7 @@ document.querySelectorAll<HTMLFormElement>('form[data-formulaire]').forEach((f) 
       const j = await r.json().catch(() => ({}));
       if (!r.ok || !j.ok) throw new Error('envoi');
       f.reset();
+      embarquer();
       if (etat) {
         etat.dataset.type = 'ok';
         etat.textContent = f.dataset.merci ?? 'Merci, votre message est bien envoyé.';
@@ -534,21 +464,45 @@ document.querySelectorAll<HTMLFormElement>('form[data-formulaire]').forEach((f) 
   });
 });
 
-/* Carte d'embarquement de la page d'adhésion */
+/* Carte d'embarquement de la page d'adhésion : elle se remplit pendant la saisie */
 {
-  const carte = document.querySelector('[data-carte]');
+  const carte = document.querySelector<HTMLElement>('[data-carte]');
   if (carte) {
-    const lier = (nom: string, cible: string, repli: string) => {
-      const entree = document.querySelector<HTMLInputElement | HTMLSelectElement>(`[name="${nom}"]`);
-      const sortie = carte.querySelector(`[data-carte-${cible}]`);
-      const maj = () => {
-        if (sortie) sortie.textContent = entree?.value.trim() || repli;
-      };
-      entree?.addEventListener('input', maj);
-      maj();
+    const champ = (nom: string) => document.querySelector<HTMLInputElement | HTMLSelectElement>(`[name="${nom}"]`);
+    const nom = champ('nom');
+    const ville = champ('ville');
+    const statut = champ('statut');
+    const ecrire = (cle: string, texte: string) =>
+      carte.querySelectorAll(`[data-carte-${cle}]`).forEach((el) => {
+        el.textContent = texte;
+      });
+
+    const barres = carte.querySelector('[data-carte-barres]');
+    const empreinte = (texte: string) => [...texte].reduce((h, c) => (Math.imul(h ^ c.charCodeAt(0), 16777619) >>> 0), 2166136261);
+
+    const maj = () => {
+      const n = nom?.value.trim() ?? '';
+      const v = ville?.value.trim() ?? '';
+      const code = texteCode128(v).replace(/[^A-Z]/g, '').slice(0, 3);
+      ecrire('nom', n || 'Votre nom');
+      ecrire('ville', v || 'Ouagadougou');
+      ecrire('code', code.length === 3 ? code : 'OUA');
+      ecrire('statut', statut?.value || 'À choisir');
+      const h = empreinte(n);
+      ecrire('siege', n ? `${(h % 30) + 1}${'ABCDEF'[(h >>> 8) % 6]}` : '1A');
+
+      const contenu = n ? `IBAE ${texteCode128(n).slice(0, 16)}`.trim() : 'IBAE.BF';
+      const { trace, largeur } = code128(contenu);
+      ecrire('code-barres', contenu);
+      barres?.setAttribute('viewBox', `0 0 ${largeur} 40`);
+      barres?.querySelector('path')?.setAttribute('d', trace);
     };
-    lier('nom', 'nom', 'Votre nom');
-    lier('ville', 'ville', 'Votre ville');
-    lier('statut', 'statut', 'Votre statut');
+
+    ecrire(
+      'date',
+      new Date().toLocaleDateString('fr-FR', { day: '2-digit', month: 'short' }).replace('.', '').toUpperCase(),
+    );
+    [nom, ville, statut].forEach((c) => c?.addEventListener('input', maj));
+    maj();
   }
 }

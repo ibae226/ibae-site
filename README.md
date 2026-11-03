@@ -6,7 +6,8 @@ Site officiel de l'Initiative Burkinabè pour l'Aéronautique et l'Espace. Site 
 
 | Ce que tu veux changer | Où |
 | --- | --- |
-| Email, réseaux, chiffres, missions, fondateurs, partenaires, frise, mentions légales | `src/data/site.ts` |
+| Email, réseaux, chiffres, missions, partenaires, frise, mentions légales | `src/data/site.ts` |
+| Bureau Exécutif et Coordination nationale | `bureau` et `coordination` dans `src/data/site.ts` |
 | Métiers, voies d'études, écoles, bourses | `src/data/orientation.ts` |
 | Un webinaire | `src/content/webinaires/` |
 | Une actualité | `src/content/actualites/` |
@@ -14,6 +15,10 @@ Site officiel de l'Initiative Burkinabè pour l'Aéronautique et l'Espace. Site 
 | Les photos | `src/assets/` |
 
 Un lien ou un champ légal laissé vide est masqué sur le site.
+
+### Ajouter la photo d'un membre
+
+Dépose un portrait dans `src/assets/equipe/`, nommé comme l'identifiant `id` du membre dans `src/data/site.ts`, par exemple `salvador-lompo.jpg`. Il remplace tout seul la silhouette provisoire.
 
 ### Ajouter un webinaire
 

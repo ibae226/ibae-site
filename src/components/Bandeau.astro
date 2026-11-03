@@ -11,6 +11,7 @@ const menu = [
     texte: 'L’IBAE',
     sous: [
       { href: '/a-propos/', texte: 'À propos' },
+      { href: '/a-propos/#equipe', texte: 'Notre équipe' },
       { href: '/partenaires/', texte: 'Partenaires' },
       { href: '/actualites/', texte: 'Actualités' },
     ],
@@ -90,7 +91,6 @@ const actif = (href: string) => (href === '/' ? chemin === '/' : chemin.startsWi
       </div>
     </details>
   </div>
-  <span class="fil-drapeau" aria-hidden="true"></span>
 </header>
 
 <style>

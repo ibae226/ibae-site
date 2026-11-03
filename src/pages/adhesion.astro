@@ -4,6 +4,11 @@ import Base from '../layouts/Base.astro';
 import EnTete from '../components/EnTete.astro';
 import Fin from '../components/Fin.astro';
 import logo from '../assets/marque/logo-ibae.png';
+import { code128 } from '../scripts/code128';
+import '@fontsource/ibm-plex-mono/500.css';
+
+const barres = code128('IBAE.BF');
+const dateVol = new Date().toLocaleDateString('fr-FR', { day: '2-digit', month: 'short' }).replace('.', '').toUpperCase();
 
 const statuts = ['Lycéen ou lycéenne', 'Étudiant ou étudiante', 'Jeune diplômé ou diplômée', 'Professionnel ou professionnelle', 'Sympathisant ou sympathisante'];
 const poles = ['Communication', 'Événements', 'Technique et projets', 'Partenariats', 'Mentorat', 'Présence sur le terrain au Burkina'];
@@ -123,26 +128,72 @@ const etapes = [
         <p class="etat" data-etat role="status"></p>
       </form>
 
-      <aside class="carte-embarquement" data-carte aria-label="Aperçu de votre carte de membre">
-        <div class="ce__haut">
-          <Image src={logo} alt="" width={56} height={56} widths={[56, 112]} sizes="56px" />
-          <div>
-            <p class="ce__titre">Carte d’embarquement</p>
-            <p class="ce__sous">Vol IBAE</p>
+      <aside class="acces" data-carte aria-label="Aperçu de votre carte d’embarquement, remplie au fil du formulaire">
+        <div class="acces__billet">
+          <header class="acces__tete">
+            <Image src={logo} alt="" width={46} height={46} widths={[46, 92]} sizes="46px" />
+            <p>
+              Initiative Burkinabè<br />
+              pour l’Aéronautique et l’Espace
+            </p>
+            <p class="acces__type">Carte d’embarquement <span>Boarding pass</span></p>
+          </header>
+
+          <div class="acces__route">
+            <div>
+              <span class="acces__lib">De</span>
+              <strong data-carte-code>OUA</strong>
+              <span class="acces__lieu" data-carte-ville>Ouagadougou</span>
+            </div>
+            <svg viewBox="0 0 120 24" aria-hidden="true">
+              <path class="acces__pointille" d="M0 12h120"></path>
+              <path class="acces__avion" d="M72 10.4 61 2h-3.4l5.2 8.4H52l-3-3.4h-2.6l1.8 5-1.8 5H49l3-3.4h10.8L57.6 22H61l11-8.4h6.4c2.2 0 3.6-.7 3.6-1.6s-1.4-1.6-3.6-1.6z"></path>
+            </svg>
+            <div class="acces__droite">
+              <span class="acces__lib">Vers</span>
+              <strong>ÉTOILES</strong>
+              <span class="acces__lieu">Sans escale</span>
+            </div>
           </div>
+
+          <dl class="acces__infos">
+            <div class="large"><dt>Passager</dt><dd data-carte-nom>Votre nom</dd></div>
+            <div><dt>Vol</dt><dd>IB 1967</dd></div>
+            <div><dt>Date</dt><dd data-carte-date>{dateVol}</dd></div>
+            <div class="acces__siege">
+              <dt>Siège</dt>
+              <dd data-carte-siege>1A</dd>
+              <svg viewBox="0 0 90 46" aria-hidden="true"><path d="M61 6C38-1 7 7 4 23c-3 15 26 21 49 18 18-2 34-12 32-23C83 8 66 3 44 5"></path></svg>
+            </div>
+            <div class="large"><dt>Classe</dt><dd data-carte-statut>À choisir</dd></div>
+          </dl>
         </div>
-        <div class="ce__route">
-          <div><span>Départ</span><strong>BF</strong></div>
-          <svg viewBox="0 0 80 20" aria-hidden="true"><path d="M0 10h70" /><path d="M64 3l10 7-10 7" /></svg>
-          <div class="ce__droite"><span>Destination</span><strong class="ce__etoiles">Les étoiles</strong></div>
+
+        <div class="acces__talon">
+          <svg class="acces__barres" data-carte-barres viewBox={`0 0 ${barres.largeur} 40`} preserveAspectRatio="none" role="img" aria-label="Code-barres de la carte">
+            <path d={barres.trace}></path>
+          </svg>
+          <p class="acces__numero" data-carte-code-barres>IBAE.BF</p>
+          <p class="main acces__devise"><span lang="mos">Hal yĩngr ãdse</span>, jusqu’aux étoiles</p>
         </div>
-        <dl>
-          <div><dt>Passager</dt><dd data-carte-nom>Votre nom</dd></div>
-          <div><dt>Embarquement</dt><dd data-carte-ville>Votre ville</dd></div>
-          <div><dt>Statut</dt><dd data-carte-statut>Votre statut</dd></div>
-        </dl>
-        <p class="main ce__devise"><span lang="mos">Hal yĩngr ãdse</span></p>
-        <span class="fil-drapeau" aria-hidden="true"></span>
+
+        <svg class="acces__tampon" viewBox="0 0 170 170" aria-hidden="true">
+          <defs>
+            <path id="tampon-cercle" d="M85 85m-61 0a61 61 0 1 1 122 0a61 61 0 1 1-122 0"></path>
+            <filter id="tampon-encre" x="-5%" y="-5%" width="110%" height="110%">
+              <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="7"></feTurbulence>
+              <feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -5 3.4"></feColorMatrix>
+              <feComposite in="SourceGraphic" operator="in"></feComposite>
+            </filter>
+          </defs>
+          <g filter="url(#tampon-encre)">
+            <circle cx="85" cy="85" r="79"></circle>
+            <circle cx="85" cy="85" r="47"></circle>
+            <text class="tampon__tour"><textPath href="#tampon-cercle" textLength="378">BIENVENUE À BORD · IBAE · BURKINA FASO ·</textPath></text>
+            <text class="tampon__centre" x="85" y="82" text-anchor="middle">IBAE</text>
+            <text class="tampon__date" x="85" y="102" text-anchor="middle" data-carte-date>{dateVol}</text>
+          </g>
+        </svg>
       </aside>
     </div>
   </section>
@@ -190,6 +241,10 @@ const etapes = [
     font-size: 0.97rem;
   }
 
+  .adhesion {
+    overflow-x: clip;
+  }
+
   .adhesion__grille {
     display: grid;
     grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
@@ -201,97 +256,237 @@ const etapes = [
     font-size: clamp(1.7rem, 3vw, 2.4rem);
   }
 
-  .carte-embarquement {
+  /* Carte imprimée : papier blanc, encre noire, talon détachable */
+  .acces {
+    --mono: 'IBM Plex Mono', ui-monospace, monospace;
     position: sticky;
     top: 104px;
-    display: grid;
-    gap: 16px;
-    padding: 22px 22px 0;
-    background: var(--nuit);
-    color: var(--blanc);
-    box-shadow: var(--ombre-feuille);
-    transform: rotate(1.4deg);
-    transition: transform 0.3s ease;
+    color: var(--encre);
+    filter: drop-shadow(6px 12px 18px rgb(14 40 68 / 0.28));
+    transform: rotate(1.2deg);
+  }
+
+  .acces__billet,
+  .acces__talon {
+    background: var(--blanc);
+  }
+
+  .acces__billet {
     overflow: hidden;
+    border-radius: 7px 7px 0 0;
   }
 
-  .carte-embarquement:hover {
-    transform: rotate(0);
-  }
-
-  .ce__haut {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-
-  .ce__titre {
-    font-weight: 700;
-    line-height: 1.2;
-  }
-
-  .ce__sous {
-    color: var(--glacier);
-    font-size: 0.9rem;
-  }
-
-  .ce__route {
+  .acces__tete {
     display: grid;
     grid-template-columns: auto 1fr auto;
     align-items: center;
-    gap: 12px;
-    padding-block: 14px;
-    border-block: 1px dashed rgb(193 226 247 / 0.45);
+    gap: 10px;
+    padding: 12px 18px;
+    background: var(--chevrons), var(--ciel);
+    color: var(--blanc);
+    font-size: 0.74rem;
+    line-height: 1.25;
   }
 
-  .ce__route span,
-  dt {
+  .acces__type {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    text-align: right;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .acces__type span {
     display: block;
     color: var(--glacier);
-    font-size: 0.82rem;
   }
 
-  .ce__route strong {
-    font-size: 2rem;
-    line-height: 1.1;
+  .acces__route {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 18px 12px;
   }
 
-  .ce__route .ce__etoiles {
-    font-size: 1.3rem;
-    color: var(--or-bf);
-  }
-
-  .ce__droite {
+  .acces__droite {
     text-align: right;
   }
 
-  .ce__route svg {
-    width: 100%;
-    height: 20px;
-    fill: none;
-    stroke: var(--cyan);
-    stroke-width: 2;
+  .acces__lib,
+  dt {
+    display: block;
+    color: #4d5f72;
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
   }
 
-  dl {
+  .acces__route strong {
+    display: block;
+    font-size: clamp(1.9rem, 3.1vw, 2.5rem);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: 0.02em;
+  }
+
+  .acces__lieu {
+    display: block;
+    max-width: 11em;
+    overflow: hidden;
+    font-family: var(--mono);
+    font-size: 0.74rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .acces__droite .acces__lieu {
+    margin-left: auto;
+  }
+
+  .acces__route svg {
+    width: 100%;
+    height: 22px;
+  }
+
+  .acces__pointille {
+    fill: none;
+    stroke: #8ea4b8;
+    stroke-width: 1.4;
+    stroke-dasharray: 2 5;
+  }
+
+  .acces__avion {
+    fill: var(--ciel);
+    stroke: var(--blanc);
+    stroke-width: 3;
+    paint-order: stroke;
+  }
+
+  .acces__infos {
     display: grid;
-    gap: 10px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px 14px;
+    padding: 12px 18px 16px;
+    border-top: 1px solid #d3dee8;
+  }
+
+  .acces__infos .large {
+    grid-column: 1 / -1;
   }
 
   dd {
     overflow-wrap: anywhere;
-    font-size: 1.1rem;
-    font-weight: 700;
-    line-height: 1.2;
+    font-family: var(--mono);
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1.25;
+    text-transform: uppercase;
   }
 
-  .ce__devise {
-    color: var(--glacier);
+  /* Le siège entouré au stylo, comme à l'enregistrement */
+  .acces__siege {
+    position: relative;
+    justify-self: start;
+  }
+
+  .acces__siege svg {
+    position: absolute;
+    bottom: -9px;
+    left: -19px;
+    width: 76px;
+    max-width: none;
+    height: 44px;
+    fill: none;
+    stroke: var(--azur);
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    overflow: visible;
+  }
+
+  .acces__talon {
+    display: grid;
+    gap: 4px;
+    padding: 16px 18px 12px;
+    border-top: 2px dashed #b5c6d6;
+    border-radius: 0 0 7px 7px;
+    transition: transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) 0.45s;
+    transform-origin: 8% 0;
+  }
+
+  .acces__barres {
+    display: block;
+    width: 100%;
+    height: 64px;
+  }
+
+  .acces__numero {
+    font-family: var(--mono);
+    font-size: 0.74rem;
+    letter-spacing: 0.08em;
+    text-align: center;
+  }
+
+  .acces__devise {
+    color: var(--ciel);
+    font-size: 1.15rem;
+    line-height: 1.1;
     text-align: right;
+    transform: rotate(-1.5deg);
   }
 
-  .carte-embarquement .fil-drapeau {
-    margin-inline: -22px;
+  /* Tampon posé à l'envoi de l'adhésion */
+  .acces__tampon {
+    position: absolute;
+    top: 192px;
+    right: 8px;
+    width: 134px;
+    opacity: 0;
+    pointer-events: none;
+    transform: rotate(-13deg);
+  }
+
+  .acces__tampon circle {
+    fill: none;
+    stroke: var(--rouge-bf);
+    stroke-width: 3;
+  }
+
+  .acces__tampon text {
+    fill: var(--rouge-bf);
+    font-family: var(--mono);
+    font-weight: 500;
+  }
+
+  .tampon__tour {
+    font-size: 15px;
+    letter-spacing: 0.04em;
+  }
+
+  .tampon__centre {
+    font-size: 22px;
+  }
+
+  .tampon__date {
+    font-size: 12px;
+  }
+
+  .embarque .acces__tampon {
+    opacity: 0.86;
+    transform: scale(1) rotate(-13deg);
+    animation: tamponner 0.28s cubic-bezier(0.3, 0, 0.3, 1);
+  }
+
+  .embarque .acces__talon {
+    transform: translateY(16px) rotate(1.6deg);
+  }
+
+  @keyframes tamponner {
+    from {
+      opacity: 0;
+      transform: scale(2) rotate(-4deg);
+    }
   }
 
   @media (max-width: 960px) {
@@ -299,9 +494,9 @@ const etapes = [
       grid-template-columns: 1fr;
     }
 
-    .carte-embarquement {
+    .acces {
       position: static;
-      order: -1;
+      max-width: 460px;
       transform: none;
     }
 

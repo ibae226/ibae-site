@@ -50,12 +50,58 @@ export const missions = [
   },
 ];
 
-export const fondateurs = [
-  'Abdoul Salam Tankoano',
-  'Dalil Osée Ouattara',
-  'Salvador Lompo',
-  'Najma Diarra',
-  'Philipe Nebie',
+// Équipe. L'identifiant donne le nom de la photo : src/assets/equipe/<id>.jpg
+export const bureau = [
+  {
+    id: 'abdoul-salam-tankoano',
+    nom: 'Abdoul Salam Tankoano',
+    poste: 'Président du Bureau Exécutif',
+    parcours: 'Élève ingénieur aérospatial, UIR et IMT Mines Albi',
+    mission: 'Porte la vision de l’IBAE, représente l’association et conduit ses relations extérieures.',
+  },
+  {
+    id: 'salvador-lompo',
+    nom: 'Salvador Lompo',
+    poste: 'Secrétaire Général',
+    parcours: 'Ingénierie aérospatiale, UIR',
+    mission: 'Veille au respect des règles, tient le registre des membres et organise les adhésions.',
+  },
+  {
+    id: 'najma-diarra',
+    nom: 'Najma Diarra',
+    poste: 'Responsable financière',
+    parcours: 'Ingénierie aérospatiale, UIR',
+    mission: 'Gère les comptes et les cotisations, établit le budget et monte les dossiers de financement.',
+  },
+  {
+    id: 'philipe-nebie',
+    nom: 'Philipe Nebie',
+    poste: 'Responsable de la communication',
+    parcours: 'Ingénierie aérospatiale, UIR',
+    mission: 'Anime nos réseaux, notre site et notre newsletter, et veille sur notre identité visuelle.',
+  },
+  {
+    id: 'dalil-osee-ouattara',
+    nom: 'Dalil Osée Ouattara',
+    poste: 'Responsable projets et événements',
+    parcours: 'Ingénierie aérospatiale, ISAE-ENSMA',
+    mission: 'Organise les webinaires et la JBAE, et pilote les projets de l’association.',
+  },
+];
+
+export const coordination = [
+  {
+    id: 'coordinateur-national',
+    nom: 'Nom à venir',
+    poste: 'Coordinateur national',
+    mission: 'Représente l’IBAE au Burkina Faso, anime l’équipe de terrain et informe le Bureau Exécutif.',
+  },
+  {
+    id: 'coordinateur-national-adjoint',
+    nom: 'Nom à venir',
+    poste: 'Coordinateur national adjoint',
+    mission: 'Seconde le coordinateur, suit les démarches administratives et appuie la logistique des événements.',
+  },
 ];
 
 export const partenaires2025 = [

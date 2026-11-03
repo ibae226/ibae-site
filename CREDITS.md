@@ -16,10 +16,10 @@ Les crédits publics se trouvent aussi sur la page `/mentions-legales/`.
 `public/terre-texture.webp` et `src/assets/marque/terre-nuit-afrique-ouest.jpg` sont calculées pour ce site à partir des textures `earth-night.jpg` et `earth-blue-marble.jpg` du paquet npm `three-globe`. Ces textures correspondent aux images « Earth at Night » et « Blue Marble » de la NASA, mais le paquet ne documente pas leur origine exacte. Si un doute subsiste, remplacer l'image par une version téléchargée sur le site de la NASA.
 
 ## Contour du Burkina Faso
-Dérivé de Natural Earth (domaine public) via le paquet npm `world-atlas`.
+La constellation et la carte découpée sont dérivées de Natural Earth (domaine public) via le paquet npm `world-atlas`.
 
 ## Polices
-IBM Plex Sans et Caveat, sous licence SIL Open Font License, hébergées avec le site.
+IBM Plex Sans, IBM Plex Mono et Caveat, sous licence SIL Open Font License, hébergées avec le site.
 
 ## Direction visuelle
 Inspirée des visuels créés pour la JBAE par le graphiste Class S : palette, texture à chevrons et constellation du Burkina.

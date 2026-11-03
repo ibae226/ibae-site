@@ -43,7 +43,11 @@ function doPost(e) {
 
     const titre = corps.formulaire === 'adhesion' ? 'Nouvelle demande d’adhésion' : 'Nouveau message du site';
     const texte = colonnes.map(function (c) { return c + ' : ' + (corps.donnees[c] || ''); }).join('\n');
-    MailApp.sendEmail(NOTIFICATION, titre + ' : ' + corps.donnees.nom, texte, { replyTo: corps.donnees.email });
+    try {
+      MailApp.sendEmail(NOTIFICATION, titre + ' : ' + corps.donnees.nom, texte, { replyTo: corps.donnees.email });
+    } catch (erreurEmail) {
+      // Quota d'emails atteint : la réponse reste enregistrée dans la feuille.
+    }
 
     return sortie({ ok: true });
   } catch (erreur) {

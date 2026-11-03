@@ -3,7 +3,7 @@
 interface Props {
   etiquette: string;
   auto?: boolean;
-  variante?: 'cartes' | 'grand';
+  variante?: 'cartes' | 'grand' | 'hublots';
   class?: string;
 }
 
@@ -64,6 +64,19 @@ const { etiquette, auto = false, variante = 'cartes', class: classe = '' } = Ast
 
   .carrousel--grand .carrousel__piste > :global(*) {
     flex: 0 0 100%;
+  }
+
+  .carrousel--hublots {
+    --espace: clamp(20px, 2.6vw, 36px);
+  }
+
+  .carrousel--hublots .carrousel__piste {
+    gap: var(--espace);
+    padding-block: 4px 12px;
+  }
+
+  .carrousel--hublots .carrousel__piste > :global(*) {
+    flex: 0 0 clamp(230px, 22.5%, 300px);
   }
 
   .carrousel__commandes {
@@ -154,6 +167,26 @@ const { etiquette, auto = false, variante = 'cartes', class: classe = '' } = Ast
 
     .carrousel--grand .carrousel__piste > :global(*) {
       flex-basis: 100%;
+    }
+
+    .carrousel--hublots .carrousel__piste > :global(*) {
+      flex-basis: 66%;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .carrousel__fleches {
+      gap: 6px;
+    }
+
+    .carrousel__fleches button {
+      width: 40px;
+      height: 40px;
+    }
+
+    .carrousel__fleches .carrousel__pause {
+      padding: 0 10px;
+      font-size: 0.8rem;
     }
   }
 </style>

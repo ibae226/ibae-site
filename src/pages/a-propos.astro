@@ -3,7 +3,8 @@ import Base from '../layouts/Base.astro';
 import EnTete from '../components/EnTete.astro';
 import Fin from '../components/Fin.astro';
 import Photo from '../components/Photo.astro';
-import { fondateurs, missions } from '../data/site';
+import Membre from '../components/Membre.astro';
+import { bureau, coordination, missions } from '../data/site';
 
 import publicJbae from '../assets/photos/public-jbae.jpg';
 import attestation from '../assets/photos/attestation.jpg';
@@ -143,12 +144,35 @@ const parcours = [
     </div>
   </section>
 
-  <section class="feuille equipe">
-    <div class="conteneur equipe__grille">
-      <h2>Les membres fondateurs</h2>
-      <ul>
-        {fondateurs.map((nom, i) => <li data-revele style={`--delai:${i * 0.07}s`}>{nom}</li>)}
+  <section class="equipe section" id="equipe" aria-labelledby="titre-equipe">
+    <div class="conteneur">
+      <div class="equipe__tete">
+        <h2 id="titre-equipe">Notre équipe</h2>
+        <p>
+          Cinq étudiants burkinabè ont fondé l’IBAE en décembre 2024. Ils forment aujourd’hui le Bureau Exécutif, et une
+          Coordination nationale prolonge leur action sur le terrain.
+        </p>
+      </div>
+
+      <h3 class="equipe__groupe">Le Bureau Exécutif</h3>
+      <ul class="equipe__bureau">
+        {bureau.map((m, i) => <Membre membre={m} delai={i * 0.07} />)}
       </ul>
+    </div>
+
+    <div class="feuille coordination">
+      <div class="conteneur coordination__grille">
+        <div class="coordination__texte">
+          <h3 class="equipe__groupe">La Coordination nationale</h3>
+          <p>
+            Elle nous donne une présence constante au Burkina Faso : elle relaie nos démarches, appuie nos événements et
+            représente l’association sur le terrain.
+          </p>
+        </div>
+        <ul class="coordination__liste">
+          {coordination.map((m, i) => <Membre membre={m} delai={i * 0.07} />)}
+        </ul>
+      </div>
     </div>
   </section>
 
@@ -321,26 +345,74 @@ const parcours = [
     margin-block: 2px 6px;
   }
 
-  .equipe__grille {
-    display: grid;
-    grid-template-columns: 1fr 1.2fr;
-    gap: clamp(24px, 7vw, 110px);
-    padding-block: clamp(56px, 8vw, 96px);
+  /* Équipe */
+  .equipe {
+    padding-bottom: 0;
+    scroll-margin-top: 90px;
   }
 
-  .equipe ul {
+  .equipe__tete {
     display: grid;
-    gap: 6px;
-    font-size: clamp(1.35rem, 2.4vw, 2rem);
-    font-weight: 300;
-    line-height: 1.3;
+    grid-template-columns: 1fr 1.3fr;
+    gap: 12px clamp(24px, 6vw, 88px);
+    align-items: end;
+  }
+
+  .equipe__groupe {
+    font-size: clamp(1.45rem, 2.4vw, 1.9rem);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+
+  .equipe__tete + .equipe__groupe {
+    margin-top: clamp(36px, 5vw, 60px);
+  }
+
+  .equipe__bureau {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 28px clamp(16px, 2vw, 28px);
+    margin-top: 24px;
+    padding-bottom: clamp(52px, 7vw, 92px);
+  }
+
+  /* Même décalage que les trois missions de l'accueil */
+  .equipe__bureau :global(.membre:nth-child(even)) {
+    margin-top: clamp(0px, 3.6vw, 52px);
+  }
+
+  .coordination__grille {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: clamp(24px, 6vw, 88px);
+    align-items: center;
+    padding-block: clamp(44px, 6vw, 72px);
+  }
+
+  .coordination__texte {
+    display: grid;
+    gap: 12px;
+  }
+
+  .coordination__liste {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 236px));
+    gap: 24px clamp(16px, 2vw, 28px);
+    justify-content: end;
+  }
+
+  @media (max-width: 1080px) {
+    .equipe__bureau {
+      grid-template-columns: repeat(3, 1fr);
+    }
   }
 
   @media (max-width: 860px) {
     .vision__grille,
     .parcours__grille,
-    .equipe__grille,
-    .contexte__grille {
+    .contexte__grille,
+    .equipe__tete,
+    .coordination__grille {
       grid-template-columns: 1fr;
     }
 
@@ -359,6 +431,15 @@ const parcours = [
   }
 
   @media (max-width: 620px) {
+    .equipe__bureau,
+    .coordination__liste {
+      grid-template-columns: 1fr;
+    }
+
+    .equipe__bureau :global(.membre:nth-child(even)) {
+      margin-top: 0;
+    }
+
     .ancrage__images {
       grid-template-columns: 1fr;
     }

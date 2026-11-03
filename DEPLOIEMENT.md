@@ -73,11 +73,11 @@ S'il y a un conflit avec un ancien enregistrement `A`, `AAAA` ou `CNAME` sur `ib
 
 ## 6. Activer les formulaires
 
-Sans cette étape, le site fonctionne, mais les formulaires affichent une erreur. Les réponses arriveront dans une feuille Google et par email sur ibae.bf@gmail.com.
+Sans cette étape, le site fonctionne, mais les formulaires affichent une erreur. Les réponses arriveront dans une feuille Google et par email sur ibae.bf@gmail.com. Pour obtenir un fichier Excel, ouvre la feuille, puis **Fichier**, **Télécharger**, **Microsoft Excel (.xlsx)**.
 
 ### Dans Google
 
-1. Connecte-toi avec le compte de l'association et crée une feuille Google nommée `Formulaires IBAE`.
+1. Ouvre une fenêtre de navigation privée, connecte-toi uniquement avec le compte de l'association et crée une feuille Google nommée `Formulaires IBAE`. Apps Script gère mal plusieurs comptes connectés. Ne crée aucune colonne : le script s'en charge.
 2. Ouvre **Extensions**, puis **Apps Script**.
 3. Efface le contenu, colle celui de `outils/google-apps-script.gs` et enregistre.
 4. Crée un secret. Dans PowerShell :
@@ -88,7 +88,7 @@ Sans cette étape, le site fonctionne, mais les formulaires affichent une erreur
 
 5. Dans Apps Script, ouvre **Paramètres du projet**, puis **Propriétés du script**. Ajoute la propriété `SECRET` avec cette valeur.
 6. Clique sur **Déployer**, **Nouveau déploiement**, choisis **Application Web**.
-7. Choisis **Exécuter en tant que : Moi** et **Qui a accès : Tout le monde**, puis **Déployer**. Google demandera d'autoriser l'accès à la feuille et l'envoi d'emails.
+7. Choisis **Exécuter en tant que : Moi** et **Qui a accès : Tout le monde**, puis **Déployer**. Google demandera d'autoriser l'accès à la feuille et l'envoi d'emails. S'il indique que l'application n'est pas validée, c'est normal pour ton propre script : clique sur **Paramètres avancés**, sur le lien d'accès au projet, puis sur **Autoriser**.
 8. Copie l'adresse qui se termine par `/exec`.
 
 « Tout le monde » est nécessaire, car Cloudflare appelle le script sans compte Google. Le secret empêche les autres de s'en servir. Ne le mets jamais dans le code ni sur GitHub.
