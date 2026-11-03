@@ -1,0 +1,41 @@
+---
+import Base from '../layouts/Base.astro';
+import EnTete from '../components/EnTete.astro';
+import { legal, site } from '../data/site';
+---
+
+<Base titre="Mentions légales" description="Mentions légales du site de l’IBAE.">
+  <EnTete titre="Mentions légales" />
+  <section class="section">
+    <div class="conteneur texte-long">
+      <h2>Éditeur du site</h2>
+      <p>
+        {site.nom} ({site.sigle}), association burkinabè à but non lucratif.
+        {legal.numeroEnregistrement && <> Numéro d’enregistrement : {legal.numeroEnregistrement}.</>}
+        {legal.adresse && <> Siège : {legal.adresse}.</>}
+      </p>
+      <p>Contact : <a href={`mailto:${site.email}`}>{site.email}</a></p>
+      <p>Responsable de la publication : {legal.directeurPublication}.</p>
+
+      <h2>Hébergement</h2>
+      <p>Cloudflare, Inc., 101 Townsend Street, San Francisco, CA 94107, États-Unis.</p>
+
+      <h2>Propriété intellectuelle</h2>
+      <p>
+        Les textes, le logo et les visuels de l’IBAE ne peuvent pas être réutilisés sans accord écrit. Les images
+        extérieures restent la propriété de leurs auteurs.
+      </p>
+
+      <h2>Crédits</h2>
+      <ul>
+        <li>Photos de la JBAE 2025 : Gmc Photography.</li>
+        <li>Affiches des webinaires : IBAE.</li>
+        <li>Image satellite de Ouagadougou : NASA, à partir de données Landsat de l’USGS.</li>
+        <li>CubeSat en orbite et lancement d’Artemis II : NASA.</li>
+        <li>Vue aérienne de Ouagadougou : kyselak, licence CC BY-SA 4.0, via Wikimedia Commons.</li>
+        <li>Terre de nuit : d’après des images de la NASA.</li>
+        <li>Direction visuelle inspirée des créations de Class S pour la JBAE.</li>
+      </ul>
+    </div>
+  </section>
+</Base>

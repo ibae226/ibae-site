@@ -1,0 +1,45 @@
+---
+import Base from '../layouts/Base.astro';
+import EnTete from '../components/EnTete.astro';
+import { site } from '../data/site';
+---
+
+<Base titre="Confidentialité" description="Comment l’IBAE collecte, utilise et protège vos données personnelles.">
+  <EnTete titre="Confidentialité" intro="Nous collectons le moins de données possible, et seulement pour vous répondre ou traiter votre adhésion." />
+  <section class="section">
+    <div class="conteneur texte-long">
+      <h2>Qui est responsable de vos données</h2>
+      <p>{site.nom} (IBAE). Contact : <a href={`mailto:${site.email}`}>{site.email}</a>.</p>
+
+      <h2>Ce que nous collectons</h2>
+      <ul>
+        <li>Formulaire de contact : nom, email, objet et message.</li>
+        <li>Formulaire d’adhésion : nom, email, téléphone, ville, pays, statut, organisation, domaine, souhaits d’engagement et motivation.</li>
+        <li>Mesure d’audience, seulement si vous l’acceptez : statistiques de visite anonymes.</li>
+      </ul>
+
+      <h2>Pourquoi nous les utilisons</h2>
+      <p>Pour répondre à vos messages, étudier les demandes d’adhésion et tenir la liste de nos membres. Nous nous appuyons sur votre consentement, que vous donnez en cochant la case du formulaire.</p>
+
+      <h2>Qui y a accès</h2>
+      <p>Seuls les membres du bureau de l’IBAE qui en ont besoin. Les réponses sont conservées dans un espace Google de l’association. Le site est hébergé par Cloudflare. Nous ne vendons jamais vos données.</p>
+
+      <h2>Combien de temps nous les gardons</h2>
+      <ul>
+        <li>Messages de contact : 2 ans après le dernier échange.</li>
+        <li>Demandes d’adhésion non abouties : 1 an.</li>
+        <li>Données des membres : pendant l’adhésion, puis 3 ans.</li>
+      </ul>
+
+      <h2>Vos droits</h2>
+      <p>Vous pouvez demander l’accès à vos données, leur correction ou leur suppression, et retirer votre consentement à tout moment, en écrivant à <a href={`mailto:${site.email}`}>{site.email}</a>.</p>
+      <p>Au Burkina Faso, la protection des données est encadrée par la loi de 2021 sur la protection des personnes à l’égard du traitement des données à caractère personnel, sous le contrôle de la Commission de l’informatique et des libertés (CIL). Si vous résidez dans l’Union européenne, le RGPD vous protège aussi.</p>
+
+      <h2>Mineurs</h2>
+      <p>Si vous avez moins de 18 ans, demandez l’accord d’un parent ou d’un tuteur avant de remplir un formulaire.</p>
+
+      <h2>Cookies</h2>
+      <p>Consultez notre <a href="/cookies/">page sur les cookies</a>.</p>
+    </div>
+  </section>
+</Base>

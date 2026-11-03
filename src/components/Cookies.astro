@@ -1,0 +1,98 @@
+---
+// Bandeau de consentement et fenêtre de préférences.
+---
+
+<div class="cookies" data-cookies-bandeau hidden role="region" aria-label="Choix des cookies">
+  <p>
+    Nous gardons votre choix sur cet appareil. Avec votre accord, nous mesurons aussi l’audience de façon anonyme pour
+    améliorer le site. <a href="/cookies/">En savoir plus</a>
+  </p>
+  <div class="actions">
+    <button type="button" class="bouton bouton--plein" data-cookies="tout">Accepter</button>
+    <button type="button" class="bouton bouton--contour" data-cookies="essentiels">Refuser</button>
+    <button type="button" class="bouton bouton--contour" data-cookies-ouvrir>Personnaliser</button>
+  </div>
+</div>
+
+<dialog class="preferences" data-cookies-dialogue aria-labelledby="titre-cookies">
+  <form method="dialog">
+    <h2 id="titre-cookies">Vos préférences</h2>
+    <label class="coche">
+      <input type="checkbox" checked disabled />
+      <span><strong>Essentiels.</strong> Ils font fonctionner le site et retiennent votre choix. Toujours actifs.</span>
+    </label>
+    <label class="coche">
+      <input type="checkbox" data-cookies-mesure />
+      <span><strong>Mesure d’audience.</strong> Statistiques de visite anonymes, sans publicité.</span>
+    </label>
+    <div class="actions">
+      <button type="submit" class="bouton bouton--nuit" data-cookies="choix">Enregistrer mon choix</button>
+    </div>
+  </form>
+</dialog>
+
+<style>
+  .cookies {
+    position: fixed;
+    z-index: 40;
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px 28px;
+    max-width: 1080px;
+    margin-inline: auto;
+    padding: 16px 20px;
+    background: var(--nuit);
+    color: var(--blanc);
+    box-shadow: var(--ombre-feuille);
+    border-top: 4px solid var(--cyan);
+    font-size: 0.98rem;
+    animation: monter 0.45s 0.4s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+
+  .cookies[hidden] {
+    display: none;
+  }
+
+  .cookies p {
+    flex: 1 1 340px;
+  }
+
+  .cookies .bouton {
+    padding: 0.55em 1em;
+    font-size: 0.95rem;
+  }
+
+  @keyframes monter {
+    from {
+      opacity: 0;
+      transform: translateY(24px);
+    }
+  }
+
+  .preferences {
+    width: min(92vw, 520px);
+    padding: 26px;
+    border: 0;
+    color: var(--nuit);
+    box-shadow: var(--ombre-feuille);
+  }
+
+  .preferences::backdrop {
+    background: rgb(4 13 26 / 0.6);
+  }
+
+  .preferences form {
+    display: grid;
+    gap: 16px;
+  }
+
+  .preferences h2 {
+    font-size: 1.6rem;
+    font-weight: 700;
+  }
+</style>

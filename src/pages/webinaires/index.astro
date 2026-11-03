@@ -1,0 +1,204 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import EnTete from '../../components/EnTete.astro';
+import Fin from '../../components/Fin.astro';
+import Photo from '../../components/Photo.astro';
+import { dateLongue, site } from '../../data/site';
+
+const webinaires = (await getCollection('webinaires')).sort((a, b) => +b.data.date - +a.data.date);
+const annees = [...new Set(webinaires.map((w) => w.data.date.getUTCFullYear()))];
+const intervenants = new Set(webinaires.flatMap((w) => w.data.intervenants.map((i) => i.nom))).size;
+---
+
+<Base
+  titre="Webinaires"
+  description="Tous les webinaires de l’IBAE : thèmes, intervenants, affiches et chiffres. Des rendez-vous gratuits sur l’aéronautique et le spatial."
+>
+  <EnTete
+    titre="Nos webinaires"
+    fort="gratuits et ouverts à tous"
+    intro="Des experts, des ingénieurs et des étudiants partagent leur parcours et répondent à vos questions. Cliquez sur une affiche pour en savoir plus."
+  >
+    <dl class="bilan">
+      <div><dd data-compte>{webinaires.length}</dd><dt>webinaires présentés ici</dt></div>
+      <div><dd data-compte>{intervenants}</dd><dt>intervenants</dt></div>
+      <div><dd data-compte>300+</dd><dt>inscrits au premier rendez-vous</dt></div>
+    </dl>
+  </EnTete>
+
+  <section class="section tuiles">
+    <div class="conteneur">
+      <div class="filtres" role="group" aria-label="Filtrer par année">
+        <button type="button" data-filtre="tout" aria-pressed="true">Tous</button>
+        {annees.map((a) => <button type="button" data-filtre={a} aria-pressed="false">{a}</button>)}
+      </div>
+
+      <ul class="grille">
+        {
+          webinaires.map((w, i) => (
+            <li data-annee={w.data.date.getUTCFullYear()} data-revele style={`--delai:${(i % 3) * 0.08}s`}>
+              <a class="tuile" href={`/webinaires/${w.id}/`}>
+                <div class="tuile__image" style={`view-transition-name:affiche-${i}`}>
+                  <Photo src={w.data.affiche} alt={w.data.alt} sizes="(max-width: 620px) 92vw, (max-width: 1000px) 46vw, 400px" largeurs={[320, 640]} />
+                </div>
+                <div class="tuile__texte">
+                  <time datetime={w.data.date.toISOString().slice(0, 10)}>{dateLongue(w.data.date)}</time>
+                  <h2>{w.data.titre}</h2>
+                  <p>{w.data.intervenants.map((p) => p.nom).join(', ')}</p>
+                </div>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="prochains ciel">
+    <div class="conteneur prochains__grille">
+      <div>
+        <h2>Ne manquez pas le prochain</h2>
+        <p>Nous annonçons chaque webinaire sur notre chaîne WhatsApp et sur nos réseaux, avec le lien de connexion.</p>
+      </div>
+      <div class="actions">
+        <a class="bouton bouton--plein" href={site.reseaux.whatsapp} rel="noopener noreferrer" target="_blank">Suivre la chaîne WhatsApp</a>
+        <a class="bouton bouton--contour" href="/contact/?objet=webinaire">Proposer un thème</a>
+      </div>
+    </div>
+  </section>
+
+  <Fin />
+</Base>
+
+<style>
+  .bilan {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px clamp(28px, 5vw, 64px);
+    margin-top: 8px;
+  }
+
+  .bilan dd {
+    font-size: clamp(2.2rem, 4vw, 3.4rem);
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .bilan dt {
+    color: var(--glacier);
+    font-size: 0.95rem;
+  }
+
+  .filtres {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 26px;
+  }
+
+  .filtres button {
+    padding: 0.45em 1.1em;
+    border: 1.5px solid var(--ciel);
+    border-radius: 2em;
+    background: transparent;
+    color: var(--ciel);
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.18s ease, color 0.18s ease;
+  }
+
+  .filtres button[aria-pressed='true'] {
+    background: var(--ciel);
+    color: var(--blanc);
+  }
+
+  .grille {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 330px), 1fr));
+    gap: clamp(18px, 2.6vw, 32px);
+  }
+
+  .grille li[hidden] {
+    display: none;
+  }
+
+  .tuile {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: var(--blanc);
+    color: var(--nuit);
+    text-decoration: none;
+    box-shadow: 0 6px 18px rgb(14 40 68 / 0.12);
+    transition: transform 0.25s cubic-bezier(0.2, 0.7, 0.2, 1), box-shadow 0.25s ease;
+  }
+
+  .tuile:hover,
+  .tuile:focus-visible {
+    transform: translateY(-8px) rotate(-0.6deg);
+    box-shadow: 0 18px 34px rgb(14 40 68 / 0.24);
+  }
+
+  .tuile__image {
+    overflow: hidden;
+    background: var(--nuit);
+  }
+
+  .tuile__image :global(img) {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    object-position: top;
+    transition: transform 0.45s ease;
+  }
+
+  .tuile:hover .tuile__image :global(img) {
+    transform: scale(1.04);
+  }
+
+  .tuile__texte {
+    display: grid;
+    gap: 6px;
+    padding: 16px 18px 20px;
+  }
+
+  time {
+    color: var(--ciel);
+    font-size: 0.92rem;
+    font-weight: 700;
+  }
+
+  .tuile h2 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    line-height: 1.18;
+  }
+
+  .tuile p {
+    font-size: 0.97rem;
+  }
+
+  .prochains {
+    padding-block: clamp(44px, 6vw, 72px);
+  }
+
+  .prochains__grille {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 22px 48px;
+  }
+
+  .prochains h2 {
+    font-size: clamp(1.7rem, 3vw, 2.5rem);
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .prochains p {
+    color: var(--glacier-pale);
+  }
+</style>

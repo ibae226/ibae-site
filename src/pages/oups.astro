@@ -1,0 +1,11 @@
+---
+import Base from '../layouts/Base.astro';
+import EnTete from '../components/EnTete.astro';
+import { site } from '../data/site';
+---
+
+<Base titre="Message non envoyé" description="Votre message n’a pas pu être envoyé à l’IBAE.">
+  <EnTete titre="Votre message n’est pas parti" intro={`Vérifiez que tous les champs sont remplis, ou écrivez-nous directement à ${site.email}.`}>
+    <a class="bouton bouton--plein" href="/contact/">Revenir au formulaire</a>
+  </EnTete>
+</Base>

@@ -1,0 +1,182 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Carrousel from '../components/Carrousel.astro';
+import EnTete from '../components/EnTete.astro';
+import Fin from '../components/Fin.astro';
+import Photo from '../components/Photo.astro';
+
+const projets = (await getCollection('projets')).sort((a, b) => a.data.ordre - b.data.ordre);
+const avecContenu = await Promise.all(projets.map(async (p) => ({ ...p, Contenu: (await render(p)).Content })));
+---
+
+<Base
+  titre="Nos projets"
+  description="La JBAE, les webinaires, le hackathon, Ailes pour Elle, Burkina CanSat et le programme de mentorat : les projets de l’IBAE."
+>
+  <EnTete titre="Nos projets" fort="sur Terre et vers les étoiles" intro="Ce que nous avons déjà réalisé, et ce que nous préparons pour la suite." />
+
+  <section class="vitrine pale">
+    <div class="conteneur">
+      <Carrousel etiquette="Tous nos projets" variante="grand" auto>
+        {
+          avecContenu.map((p) => (
+            <article class="projet" id={p.id}>
+              <Photo
+                class="projet__photo"
+                src={p.data.image}
+                alt={p.data.alt}
+                sizes="(max-width: 860px) 92vw, 56vw"
+                largeurs={[480, 800, 1200]}
+              />
+              <div class="projet__texte">
+                <p class:list={['statut', { 'statut--prep': p.data.statut === 'preparation' }]}>
+                  <span class="etoile" aria-hidden="true" />
+                  {p.data.statut === 'realise' ? 'Réalisé' : 'En préparation'}
+                </p>
+                <h2>{p.data.titre}</h2>
+                {p.data.legende && <p class="main">{p.data.legende}</p>}
+                <p.Contenu />
+                {p.data.lien ? (
+                  <a class="bouton bouton--nuit" href={p.data.lien}>{p.data.lienTexte}</a>
+                ) : p.data.statut === 'preparation' ? (
+                  <a class="bouton bouton--nuit" href="/partenaires/">Soutenir ce projet</a>
+                ) : null}
+              </div>
+            </article>
+          ))
+        }
+      </Carrousel>
+    </div>
+  </section>
+
+  <section class="liste section" aria-labelledby="titre-liste">
+    <div class="conteneur">
+      <h2 id="titre-liste">Tous les projets en un coup d’œil</h2>
+      <ul>
+        {
+          projets.map((p) => (
+            <li data-revele>
+              <a href={p.data.lien ?? `#${p.id}`}>
+                <span class="liste__nom">{p.data.titre}</span>
+                <span class="liste__resume">{p.data.resume}</span>
+                <span class="liste__statut">{p.data.statut === 'realise' ? 'Réalisé' : 'En préparation'}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <Fin />
+</Base>
+
+<style>
+  .vitrine {
+    padding-block: clamp(36px, 5vw, 64px);
+  }
+
+  .projet {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    background: var(--blanc);
+    box-shadow: 0 8px 22px rgb(14 40 68 / 0.12);
+    scroll-margin-top: 90px;
+  }
+
+  .projet :global(picture) {
+    height: 100%;
+  }
+
+  .projet :global(.projet__photo) {
+    width: 100%;
+    height: 100%;
+    min-height: 380px;
+    aspect-ratio: 3 / 2;
+    object-fit: cover;
+  }
+
+  .projet__texte {
+    display: grid;
+    gap: 12px;
+    align-content: center;
+    justify-items: start;
+    padding: clamp(22px, 3.4vw, 48px);
+  }
+
+  .projet__texte h2 {
+    font-size: clamp(1.7rem, 2.8vw, 2.4rem);
+    font-weight: 700;
+    line-height: 1.1;
+  }
+
+  .projet__texte :global(p) {
+    max-width: 48ch;
+  }
+
+  .statut {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    color: var(--ciel);
+    font-size: 0.92rem;
+    font-weight: 700;
+  }
+
+  .liste ul {
+    margin-top: 28px;
+    border-top: 1px solid #b7cde0;
+  }
+
+  .liste li {
+    border-bottom: 1px solid #b7cde0;
+  }
+
+  .liste a {
+    display: grid;
+    grid-template-columns: 1.2fr 1.5fr 9em;
+    gap: 8px 24px;
+    align-items: baseline;
+    padding-block: 15px;
+    text-decoration: none;
+    transition: padding-left 0.2s ease, background-color 0.2s ease;
+  }
+
+  .liste a:hover {
+    padding-left: 10px;
+    background: var(--glacier-pale);
+  }
+
+  .liste__nom {
+    font-size: 1.2rem;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .liste__statut {
+    color: var(--ciel);
+    font-size: 0.92rem;
+    font-weight: 700;
+    text-align: right;
+  }
+
+  @media (max-width: 860px) {
+    .projet {
+      grid-template-columns: 1fr;
+    }
+
+    .projet :global(.projet__photo) {
+      min-height: 0;
+      height: auto;
+    }
+
+    .liste a {
+      grid-template-columns: 1fr;
+    }
+
+    .liste__statut {
+      text-align: left;
+    }
+  }
+</style>

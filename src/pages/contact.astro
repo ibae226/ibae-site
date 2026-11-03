@@ -1,0 +1,109 @@
+---
+import Base from '../layouts/Base.astro';
+import EnTete from '../components/EnTete.astro';
+import Fin from '../components/Fin.astro';
+import { site } from '../data/site';
+
+const objets = [
+  { v: 'question', t: 'Une question' },
+  { v: 'partenariat', t: 'Un partenariat' },
+  { v: 'webinaire', t: 'Un webinaire ou une intervention' },
+  { v: 'presse', t: 'Presse et médias' },
+  { v: 'autre', t: 'Autre chose' },
+];
+const canaux = [
+  { nom: 'LinkedIn', href: site.reseaux.linkedin },
+  { nom: 'Instagram', href: site.reseaux.instagram },
+  { nom: 'Chaîne WhatsApp', href: site.reseaux.whatsapp },
+  { nom: 'Communauté WhatsApp', href: site.groupeWhatsapp },
+  { nom: 'Facebook', href: site.reseaux.facebook },
+].filter((c) => c.href);
+---
+
+<Base titre="Contact" description="Écrivez à l’IBAE pour une question, un partenariat, un webinaire ou une demande de presse.">
+  <EnTete titre="Écrivez-nous" intro="Une question, une idée, une proposition ? Nous lisons tous les messages." />
+
+  <section class="section">
+    <div class="conteneur contact">
+      <form class="formulaire" data-formulaire action="/api/formulaire" method="post" data-merci="Merci. Votre message est bien envoyé, nous vous répondons rapidement.">
+        <input type="hidden" name="formulaire" value="contact" />
+        <input type="hidden" name="t0" value="" />
+        <div class="piege" aria-hidden="true">
+          <label>Site web <input type="text" name="site_web" tabindex="-1" autocomplete="off" /></label>
+        </div>
+
+        <div class="duo">
+          <div class="champ">
+            <label for="c-nom">Nom</label>
+            <input id="c-nom" name="nom" required maxlength="120" autocomplete="name" />
+          </div>
+          <div class="champ">
+            <label for="c-email">Email</label>
+            <input id="c-email" name="email" type="email" required maxlength="160" autocomplete="email" />
+          </div>
+        </div>
+        <div class="champ">
+          <label for="c-objet">Votre message concerne</label>
+          <select id="c-objet" name="objet" required>
+            {objets.map((o) => <option value={o.v}>{o.t}</option>)}
+          </select>
+        </div>
+        <div class="champ">
+          <label for="c-msg">Message</label>
+          <textarea id="c-msg" name="message" required maxlength="3000"></textarea>
+        </div>
+        <label class="coche">
+          <input type="checkbox" name="consentement" value="oui" required />
+          <span>J’accepte que l’IBAE utilise ces informations pour me répondre, selon la <a href="/confidentialite/">politique de confidentialité</a>.</span>
+        </label>
+        <div class="actions">
+          <button type="submit" class="bouton bouton--nuit">Envoyer le message</button>
+        </div>
+        <p class="etat" data-etat role="status"></p>
+      </form>
+
+      <aside class="coord">
+        <h2>Autres moyens</h2>
+        <p><a href={`mailto:${site.email}`}>{site.email}</a></p>
+        <ul>
+          {canaux.map((c) => <li><a href={c.href} rel="noopener noreferrer" target="_blank">{c.nom}</a></li>)}
+        </ul>
+        <p class="main"><span lang="mos">Hal yĩngr ãdse</span>, jusqu’aux étoiles</p>
+      </aside>
+    </div>
+  </section>
+
+  <Fin />
+</Base>
+
+<style>
+  .contact {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+    gap: clamp(28px, 6vw, 88px);
+    align-items: start;
+  }
+
+  .coord {
+    display: grid;
+    gap: 14px;
+    padding: 24px;
+    background: var(--glacier);
+    box-shadow: var(--ombre-feuille);
+  }
+
+  .coord h2 {
+    font-size: 1.6rem;
+    font-weight: 700;
+  }
+
+  .coord li + li {
+    margin-top: 5px;
+  }
+
+  @media (max-width: 860px) {
+    .contact {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

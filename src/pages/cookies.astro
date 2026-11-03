@@ -1,0 +1,29 @@
+---
+import Base from '../layouts/Base.astro';
+import EnTete from '../components/EnTete.astro';
+---
+
+<Base titre="Cookies" description="Les cookies et le stockage local utilisés par le site de l’IBAE, et comment changer votre choix.">
+  <EnTete titre="Cookies" intro="Ce que le site garde sur votre appareil, et comment changer d’avis." />
+  <section class="section">
+    <div class="conteneur texte-long">
+      <h2>Essentiels</h2>
+      <p>Ils sont nécessaires au site et ne demandent pas votre accord.</p>
+      <ul>
+        <li><strong>ibae-consentement</strong> : retient votre choix pendant 6 mois.</li>
+        <li><strong>ibae-calme</strong> : retient votre préférence si vous mettez les animations en pause.</li>
+        <li>Notre hébergeur Cloudflare peut déposer un cookie technique de sécurité.</li>
+      </ul>
+
+      <h2>Mesure d’audience</h2>
+      <p>Avec votre accord, nous utilisons Cloudflare Web Analytics pour savoir quelles pages sont consultées. Cet outil ne dépose pas de cookie publicitaire et ne vous suit pas d’un site à l’autre. Sans votre accord, il n’est pas chargé.</p>
+
+      <h2>Publicité</h2>
+      <p>Nous n’affichons aucune publicité et n’utilisons aucun cookie publicitaire.</p>
+
+      <h2>Changer votre choix</h2>
+      <p>Vous pouvez modifier votre choix à tout moment.</p>
+      <button type="button" class="bouton bouton--nuit" data-cookies-ouvrir>Gérer les cookies</button>
+    </div>
+  </section>
+</Base>

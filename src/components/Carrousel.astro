@@ -1,0 +1,159 @@
+---
+// Carrousel accessible : défilement natif, flèches, points, pause et lecture automatique.
+interface Props {
+  etiquette: string;
+  auto?: boolean;
+  variante?: 'cartes' | 'grand';
+  class?: string;
+}
+
+const { etiquette, auto = false, variante = 'cartes', class: classe = '' } = Astro.props;
+---
+
+<div
+  class:list={['carrousel', `carrousel--${variante}`, classe]}
+  data-carrousel
+  data-auto={auto ? '1' : undefined}
+  role="group"
+  aria-roledescription="carrousel"
+  aria-label={etiquette}
+>
+  <div class="carrousel__piste" data-piste tabindex="0">
+    <slot />
+  </div>
+  <div class="carrousel__commandes">
+    <div class="carrousel__points" data-points></div>
+    <div class="carrousel__fleches">
+      {
+        auto && (
+          <button type="button" class="carrousel__pause" data-pause aria-pressed="false">
+            Pause
+          </button>
+        )
+      }
+      <button type="button" data-prec aria-label="Précédent">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
+      </button>
+      <button type="button" data-suiv aria-label="Suivant">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<style>
+  .carrousel__piste {
+    position: relative;
+    display: flex;
+    gap: clamp(14px, 2vw, 24px);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    padding-bottom: 6px;
+  }
+
+  .carrousel__piste::-webkit-scrollbar {
+    display: none;
+  }
+
+  .carrousel__piste > :global(*) {
+    flex: 0 0 min(38%, 460px);
+    scroll-snap-align: start;
+  }
+
+  .carrousel--grand .carrousel__piste > :global(*) {
+    flex: 0 0 100%;
+  }
+
+  .carrousel__commandes {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: 18px;
+  }
+
+  .carrousel__points {
+    display: flex;
+    flex-wrap: wrap;
+    margin-inline-start: -6.5px;
+  }
+
+  /* Zone de clic de 24 px autour d'un point de 11 px */
+  .carrousel__points :global(button) {
+    position: relative;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    cursor: pointer;
+  }
+
+  .carrousel__points :global(button)::before {
+    content: '';
+    position: absolute;
+    inset: 6.5px;
+    border: 1.5px solid currentColor;
+    border-radius: 50%;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+  }
+
+  .carrousel__points :global(button[aria-current='true'])::before {
+    background: currentColor;
+    transform: scale(1.25);
+  }
+
+  .carrousel__fleches {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .carrousel__fleches button {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 1.5px solid currentColor;
+    border-radius: 50%;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+    transition: background-color 0.18s ease, transform 0.18s ease;
+  }
+
+  .carrousel__fleches button:hover {
+    background: rgb(127 154 181 / 0.25);
+    transform: scale(1.06);
+  }
+
+  .carrousel__fleches svg {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+  }
+
+  .carrousel__fleches .carrousel__pause {
+    width: auto;
+    padding: 0 14px;
+    border-radius: 22px;
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 860px) {
+    .carrousel__piste > :global(*) {
+      flex-basis: 82%;
+    }
+
+    .carrousel--grand .carrousel__piste > :global(*) {
+      flex-basis: 100%;
+    }
+  }
+</style>

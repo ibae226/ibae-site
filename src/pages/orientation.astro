@@ -1,0 +1,229 @@
+---
+import Base from '../layouts/Base.astro';
+import EnTete from '../components/EnTete.astro';
+import Fin from '../components/Fin.astro';
+import { bourses, ecoles, metiers, voies } from '../data/orientation';
+---
+
+<Base titre="S’orienter" description="Métiers, études, écoles et bourses : un guide de l’IBAE pour entrer dans l’aéronautique et le spatial depuis le Burkina Faso.">
+  <EnTete
+    titre="Par où commencer"
+    fort="quand on rêve du ciel ?"
+    intro="Un premier repère pour les lycéens, les étudiants et leurs parents : les métiers, les études, les écoles et les bourses."
+  >
+    <nav class="sommaire" aria-label="Sur cette page">
+      <a href="#metiers">Les métiers</a>
+      <a href="#etudes">Les études</a>
+      <a href="#ecoles">Les écoles</a>
+      <a href="#bourses">Les bourses</a>
+    </nav>
+  </EnTete>
+
+  <section class="section" id="metiers" aria-labelledby="t-metiers">
+    <div class="conteneur">
+      <h2 id="t-metiers">Six métiers à découvrir</h2>
+      <ul class="metiers">
+        {
+          metiers.map((m, i) => (
+            <li data-revele style={`--delai:${(i % 3) * 0.08}s`}>
+              <h3>{m.titre}</h3>
+              <p>{m.texte}</p>
+              <p class="voie">{m.voie}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="feuille" id="etudes" aria-labelledby="t-etudes">
+    <div class="conteneur etudes">
+      <div>
+        <h2 id="t-etudes">Quatre grandes voies d’études</h2>
+        <p>Il n’y a pas une seule porte d’entrée. Notre webinaire sur les études compare ces parcours avec des professionnels et des étudiants.</p>
+        <a class="bouton bouton--nuit" href="/webinaires/2026-07-18-quelles-etudes/">Voir le webinaire</a>
+      </div>
+      <ul>
+        {voies.map((v) => <li data-revele><h3>{v.titre}</h3><p>{v.texte}</p></li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section" id="ecoles" aria-labelledby="t-ecoles">
+    <div class="conteneur">
+      <h2 id="t-ecoles">Quelques écoles à connaître</h2>
+      <p class="note">Une liste de départ, en Afrique et ailleurs, sans ordre de préférence.</p>
+      <ul class="ecoles">
+        {
+          ecoles.map((e) => (
+            <li data-revele>
+              <div>
+                <h3>{e.nom}</h3>
+                <p class="lieu">{e.lieu}</p>
+              </div>
+              <p>{e.texte}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="section ciel" id="bourses" aria-labelledby="t-bourses">
+    <div class="conteneur">
+      <h2 id="t-bourses">Des bourses pour financer ses études</h2>
+      <p class="note">Les conditions et les dates changent chaque année : vérifiez toujours sur le site officiel de chaque programme.</p>
+      <ul class="bourses">
+        {
+          bourses.map((b, i) => (
+            <li data-revele style={`--delai:${i * 0.08}s`}>
+              <h3>{b.nom}</h3>
+              <p class="pour">{b.pour}</p>
+              <p>{b.texte}</p>
+            </li>
+          ))
+        }
+      </ul>
+      <a class="bouton bouton--plein" href="/webinaires/2026-07-25-etudier-aerospatial-bourses/">Voir le webinaire sur les bourses</a>
+    </div>
+  </section>
+
+  <Fin />
+</Base>
+
+<style>
+  .sommaire {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 22px;
+    margin-top: 6px;
+  }
+
+  .sommaire a {
+    font-weight: 700;
+  }
+
+  section[id] {
+    scroll-margin-top: 90px;
+  }
+
+  .metiers {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: clamp(20px, 3vw, 40px) clamp(20px, 4vw, 56px);
+    margin-top: 32px;
+  }
+
+  .metiers li {
+    display: grid;
+    gap: 7px;
+    align-content: start;
+    padding-top: 14px;
+    border-top: 3px solid var(--ciel);
+  }
+
+  .metiers h3 {
+    font-weight: 700;
+    font-size: 1.35rem;
+  }
+
+  .voie {
+    color: var(--ciel);
+    font-size: 0.93rem;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+
+  .etudes {
+    display: grid;
+    grid-template-columns: 1fr 1.3fr;
+    gap: clamp(28px, 6vw, 88px);
+    padding-block: clamp(44px, 6vw, 80px);
+  }
+
+  .etudes > div {
+    display: grid;
+    gap: 16px;
+    justify-items: start;
+    align-content: start;
+  }
+
+  .etudes ul {
+    display: grid;
+    gap: 16px;
+  }
+
+  .etudes h3 {
+    font-weight: 700;
+    font-size: 1.3rem;
+    margin-bottom: 3px;
+  }
+
+  .note {
+    margin-top: 10px;
+  }
+
+  .ecoles {
+    margin-top: 26px;
+    border-top: 1px solid #b7cde0;
+  }
+
+  .ecoles li {
+    display: grid;
+    grid-template-columns: 1fr 1.6fr;
+    gap: 6px 28px;
+    padding-block: 14px;
+    border-bottom: 1px solid #b7cde0;
+  }
+
+  .ecoles h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+  }
+
+  .lieu {
+    color: var(--ciel);
+    font-size: 0.93rem;
+  }
+
+  .bourses {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px clamp(20px, 4vw, 56px);
+    margin-block: 28px;
+  }
+
+  .bourses li {
+    padding: 14px 0 0;
+    border-top: 1px solid rgb(193 226 247 / 0.4);
+  }
+
+  .bourses h3 {
+    font-weight: 700;
+    font-size: 1.3rem;
+  }
+
+  .pour {
+    margin-block: 3px 6px;
+    color: var(--or-bf);
+    font-weight: 700;
+    font-size: 0.95rem;
+  }
+
+  .ciel p {
+    color: var(--glacier-pale);
+  }
+
+  .ciel .pour {
+    color: var(--or-bf);
+  }
+
+  @media (max-width: 860px) {
+    .metiers,
+    .etudes,
+    .bourses,
+    .ecoles li {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

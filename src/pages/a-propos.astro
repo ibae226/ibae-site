@@ -1,0 +1,366 @@
+---
+import Base from '../layouts/Base.astro';
+import EnTete from '../components/EnTete.astro';
+import Fin from '../components/Fin.astro';
+import Photo from '../components/Photo.astro';
+import { fondateurs, missions } from '../data/site';
+
+import publicJbae from '../assets/photos/public-jbae.jpg';
+import attestation from '../assets/photos/attestation.jpg';
+import ouagaAerien from '../assets/web/ouagadougou-vue-aerienne.jpg';
+import ouagaLandsat from '../assets/web/ouagadougou-landsat.jpg';
+
+const parcours = [
+  {
+    date: '1er décembre 2024',
+    titre: 'Première rencontre',
+    texte: 'Cinq étudiants burkinabè en ingénierie aérospatiale décident de créer l’IBAE.',
+  },
+  {
+    date: '26 avril 2025',
+    titre: 'Premier webinaire',
+    texte: 'Plus de 300 inscrits pour écouter le parcours d’Alex Zongo.',
+  },
+  {
+    date: '13 septembre 2025',
+    titre: 'Première JBAE',
+    texte: 'Plus de 50 passionnés et six entités réunis à Ouaga 2000.',
+  },
+  {
+    date: '2026',
+    titre: 'Association enregistrée',
+    texte: 'L’IBAE se dote d’un cadre officiel pour nouer des partenariats et lancer de nouveaux projets.',
+  },
+  {
+    date: 'Été 2026',
+    titre: 'Série d’orientation',
+    texte: 'Trois webinaires pour découvrir le secteur, choisir ses études et trouver des bourses.',
+  },
+];
+---
+
+<Base
+  titre="À propos"
+  description="L’IBAE est une association à but non lucratif fondée en décembre 2024 par des étudiants burkinabè en ingénierie aérospatiale."
+>
+  <EnTete
+    titre="Une initiative née"
+    fort="entre étudiants burkinabè"
+    intro="L’Initiative Burkinabè pour l’Aéronautique et l’Espace est une association à but non lucratif, fondée en décembre 2024 par des étudiants de la diaspora en ingénierie aérospatiale."
+  />
+
+  <section class="feuille vision">
+    <div class="conteneur vision__grille">
+      <div data-revele>
+        <h2>Notre vision</h2>
+        <p class="vision__phrase">
+          Devenir la plateforme vers laquelle se tournent les Burkinabè pour toute question sur l’aéronautique et
+          l’espace.
+        </p>
+      </div>
+      <figure data-revele="photo">
+        <Photo
+          src={publicJbae}
+          alt="Le public de la JBAE 2025 suit une intervention."
+          sizes="(max-width: 860px) 92vw, 44vw"
+          largeurs={[480, 800, 1200]}
+        />
+        <figcaption class="main">Le public de la JBAE 2025</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="contexte ciel" aria-labelledby="titre-contexte">
+    <div class="conteneur">
+      <h2 id="titre-contexte">Pourquoi nous agissons</h2>
+      <div class="contexte__grille">
+        <p>
+          Le secteur aéronautique et spatial se développe en Afrique et les opportunités se multiplient pour les jeunes
+          et les professionnels. Le Burkina Faso y reste encore peu représenté.
+        </p>
+        <p>
+          Pour changer cela, il faut sensibiliser et former une nouvelle génération d’experts, et créer un écosystème
+          actif autour de ces métiers.
+        </p>
+      </div>
+      <ul class="contexte__missions">
+        {
+          missions.map((m) => (
+            <li>
+              <h3>{m.titre}</h3>
+              <p>{m.texte}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="ancrage" aria-labelledby="titre-ancrage">
+    <div class="ancrage__images">
+      <figure>
+        <Photo src={ouagaAerien} alt="Vue aérienne d’un quartier de Ouagadougou." sizes="(max-width: 760px) 100vw, 50vw" largeurs={[480, 800]} />
+        <figcaption>Ouagadougou vue d’avion. Photo kyselak, CC BY-SA 4.0.</figcaption>
+      </figure>
+      <figure>
+        <Photo src={ouagaLandsat} alt="Image satellite en fausses couleurs de Ouagadougou et de ses environs." sizes="(max-width: 760px) 100vw, 50vw" largeurs={[480, 800]} />
+        <figcaption>La même ville vue par le satellite Landsat 7, en 2006. Image NASA.</figcaption>
+      </figure>
+    </div>
+    <div class="conteneur ancrage__texte" data-revele>
+      <h2 id="titre-ancrage">Ancrés ici, tournés vers le ciel</h2>
+      <p>
+        Nous sommes étudiants et jeunes professionnels, au pays et dans la diaspora. Où que nous soyons, notre point de
+        départ reste le même : le Burkina Faso.
+      </p>
+    </div>
+  </section>
+
+  <section class="parcours" aria-labelledby="titre-parcours">
+    <div class="conteneur parcours__grille">
+      <div class="parcours__tete">
+        <h2 id="titre-parcours">Notre parcours</h2>
+        <figure data-revele="photo">
+          <Photo
+            src={attestation}
+            alt="Remise d’une attestation entre deux hommes pendant la JBAE 2025."
+            sizes="(max-width: 860px) 92vw, 34vw"
+            largeurs={[480, 800, 1200]}
+          />
+        </figure>
+      </div>
+      <ol class="frise">
+        {
+          parcours.map((e, i) => (
+            <li data-revele style={`--delai:${i * 0.08}s`}>
+              <p class="frise__date">{e.date}</p>
+              <h3>{e.titre}</h3>
+              <p>{e.texte}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="feuille equipe">
+    <div class="conteneur equipe__grille">
+      <h2>Les membres fondateurs</h2>
+      <ul>
+        {fondateurs.map((nom, i) => <li data-revele style={`--delai:${i * 0.07}s`}>{nom}</li>)}
+      </ul>
+    </div>
+  </section>
+
+  <Fin />
+</Base>
+
+<style>
+  .vision__grille {
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    gap: clamp(32px, 6vw, 88px);
+    align-items: center;
+    padding-block: clamp(56px, 8vw, 100px);
+  }
+
+  .vision__phrase {
+    margin-top: 18px;
+    font-size: clamp(1.4rem, 2.4vw, 2rem);
+    font-weight: 300;
+    line-height: 1.25;
+  }
+
+  .vision figure :global(img),
+  .parcours figure :global(img) {
+    width: 100%;
+    border-radius: 2px 2px 40px 2px;
+  }
+
+  figcaption {
+    margin-top: 8px;
+    font-size: 0.86rem;
+  }
+
+  figcaption.main {
+    font-size: 1.3rem;
+  }
+
+  .contexte {
+    padding-block: var(--section);
+  }
+
+  .contexte__grille {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: clamp(20px, 4vw, 56px);
+    margin-top: 28px;
+    color: var(--glacier-pale);
+  }
+
+  .contexte__missions {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin-top: clamp(36px, 5vw, 60px);
+    border-top: 1px solid rgb(193 226 247 / 0.35);
+  }
+
+  .contexte__missions li {
+    padding: 18px 22px 8px;
+    border-left: 1px solid rgb(193 226 247 / 0.35);
+  }
+
+  .contexte__missions li:last-child {
+    border-right: 1px solid rgb(193 226 247 / 0.35);
+  }
+
+  .contexte__missions h3 {
+    font-weight: 700;
+    font-size: 1.4rem;
+    margin-bottom: 8px;
+  }
+
+  .contexte__missions p {
+    color: var(--glacier);
+  }
+
+  .ancrage {
+    background: var(--encre);
+    color: var(--blanc);
+  }
+
+  .ancrage__images {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .ancrage__images figure {
+    position: relative;
+  }
+
+  .ancrage__images :global(img) {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+  }
+
+  .ancrage__images figcaption {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    margin: 0;
+    padding: 6px 12px;
+    background: rgb(4 13 26 / 0.72);
+    font-size: 0.8rem;
+  }
+
+  .ancrage__texte {
+    display: grid;
+    gap: 14px;
+    padding-block: clamp(40px, 6vw, 72px);
+  }
+
+  .ancrage__texte p {
+    color: var(--glacier);
+  }
+
+  .parcours {
+    padding-block: var(--section);
+    background: var(--blanc);
+  }
+
+  .parcours__grille {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: clamp(36px, 7vw, 110px);
+  }
+
+  .parcours__tete {
+    display: grid;
+    gap: 28px;
+    align-content: start;
+  }
+
+  .frise {
+    position: relative;
+    display: grid;
+    gap: 30px;
+    padding-left: 34px;
+  }
+
+  .frise::before {
+    content: '';
+    position: absolute;
+    left: 8px;
+    top: 10px;
+    bottom: 40px;
+    border-left: 1px solid var(--azur);
+  }
+
+  .frise li {
+    position: relative;
+  }
+
+  .frise li::before {
+    content: '';
+    position: absolute;
+    left: -34px;
+    top: 3px;
+    width: 18px;
+    height: 18px;
+    background: var(--ciel);
+    clip-path: polygon(50% 0, 62% 35%, 98% 35%, 69% 57%, 79% 91%, 50% 71%, 21% 91%, 31% 57%, 2% 35%, 38% 35%);
+  }
+
+  .frise__date {
+    color: var(--ciel);
+    font-weight: 700;
+  }
+
+  .frise h3 {
+    margin-block: 2px 6px;
+  }
+
+  .equipe__grille {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: clamp(24px, 7vw, 110px);
+    padding-block: clamp(56px, 8vw, 96px);
+  }
+
+  .equipe ul {
+    display: grid;
+    gap: 6px;
+    font-size: clamp(1.35rem, 2.4vw, 2rem);
+    font-weight: 300;
+    line-height: 1.3;
+  }
+
+  @media (max-width: 860px) {
+    .vision__grille,
+    .parcours__grille,
+    .equipe__grille,
+    .contexte__grille {
+      grid-template-columns: 1fr;
+    }
+
+    .contexte__missions {
+      grid-template-columns: 1fr;
+      border-top: 0;
+    }
+
+    .contexte__missions li,
+    .contexte__missions li:last-child {
+      padding: 16px 0;
+      border-left: 0;
+      border-right: 0;
+      border-top: 1px solid rgb(193 226 247 / 0.35);
+    }
+  }
+
+  @media (max-width: 620px) {
+    .ancrage__images {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

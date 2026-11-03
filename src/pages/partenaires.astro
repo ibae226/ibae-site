@@ -1,0 +1,162 @@
+---
+import Base from '../layouts/Base.astro';
+import EnTete from '../components/EnTete.astro';
+import Fin from '../components/Fin.astro';
+import Photo from '../components/Photo.astro';
+import { partenaires2025 } from '../data/site';
+import demonstration from '../assets/photos/demonstration-drone.jpg';
+
+const raisons = [
+  { titre: 'Une visibilité ciblée', texte: 'Présentez votre organisation à une jeunesse et à une communauté en ligne en pleine croissance.' },
+  { titre: 'L’accès aux talents', texte: 'Rencontrez la future génération d’ingénieurs, de techniciens et d’innovateurs burkinabè.' },
+  { titre: 'Un impact concret', texte: 'Soutenez l’éducation scientifique, l’orientation des jeunes et l’innovation au Burkina Faso.' },
+  { titre: 'Une position stratégique', texte: 'Associez votre image à un secteur d’avenir et à un écosystème naissant.' },
+];
+const formes = [
+  'Financer un projet ou un événement',
+  'Mettre à disposition un lieu ou du matériel',
+  'Prendre en charge la restauration ou l’impression',
+  'Offrir des prix, des bourses, des formations ou des stages',
+  'Mettre à disposition des experts, panélistes ou mentors',
+  'Assurer une couverture médiatique',
+];
+---
+
+<Base titre="Partenaires" description="Devenez partenaire de l’IBAE et soutenez la jeunesse burkinabè dans l’aéronautique et le spatial.">
+  <EnTete
+    titre="Construisons ensemble"
+    fort="l’aérospatial burkinabè"
+    intro="Entreprises, institutions, écoles, fondations : votre soutien se transforme directement en opportunités pour les jeunes."
+  >
+    <a class="bouton bouton--plein" href="/contact/?objet=partenariat">Devenir partenaire</a>
+  </EnTete>
+
+  <section class="section">
+    <div class="conteneur">
+      <h2>Pourquoi nous soutenir</h2>
+      <ul class="raisons">
+        {
+          raisons.map((r, i) => (
+            <li data-revele style={`--delai:${i * 0.08}s`}>
+              <h3>{r.titre}</h3>
+              <p>{r.texte}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="feuille formes">
+    <div class="conteneur formes__grille">
+      <div data-revele="photo">
+        <Photo src={demonstration} alt="Démonstration de drone pendant la JBAE 2025." sizes="(max-width: 860px) 92vw, 44vw" largeurs={[480, 800, 1200]} />
+      </div>
+      <div>
+        <h2>Comment nous soutenir</h2>
+        <ul>{formes.map((f) => <li><span class="etoile" aria-hidden="true"></span>{f}</li>)}</ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="conteneur">
+      <h2>Ils nous ont fait confiance</h2>
+      <p class="confiance">La première JBAE a été rendue possible par ces six entités.</p>
+      <ul class="noms">{partenaires2025.map((p, i) => <li data-revele style={`--delai:${i * 0.06}s`}>{p}</li>)}</ul>
+    </div>
+  </section>
+
+  <Fin />
+</Base>
+
+<style>
+  .raisons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    margin-top: 32px;
+    border-top: 1px solid #b7cde0;
+  }
+
+  .raisons li {
+    padding: 18px 20px 6px;
+    border-left: 1px solid #b7cde0;
+  }
+
+  .raisons li:last-child {
+    border-right: 1px solid #b7cde0;
+  }
+
+  .raisons h3 {
+    margin-bottom: 8px;
+    font-size: 1.25rem;
+    font-weight: 700;
+  }
+
+  .raisons p {
+    font-size: 0.98rem;
+  }
+
+  .formes__grille {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: clamp(28px, 5vw, 72px);
+    align-items: center;
+    padding-block: clamp(44px, 6vw, 80px);
+  }
+
+  .formes :global(img) {
+    width: 100%;
+  }
+
+  .formes ul {
+    display: grid;
+    gap: 9px;
+    margin-top: 18px;
+  }
+
+  .formes li {
+    display: flex;
+    gap: 10px;
+    align-items: baseline;
+  }
+
+  .formes .etoile {
+    flex: none;
+    color: var(--ciel);
+  }
+
+  .confiance {
+    margin-top: 10px;
+  }
+
+  .noms {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 22px;
+  }
+
+  .noms li {
+    padding: 0.45em 1em;
+    background: var(--glacier-pale);
+    font-size: 1.1rem;
+    font-weight: 700;
+  }
+
+  @media (max-width: 960px) {
+    .raisons {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .raisons li:nth-child(2n) {
+      border-right: 1px solid #b7cde0;
+    }
+  }
+
+  @media (max-width: 760px) {
+    .formes__grille {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

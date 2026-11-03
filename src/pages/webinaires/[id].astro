@@ -1,0 +1,241 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Fin from '../../components/Fin.astro';
+import Photo from '../../components/Photo.astro';
+import { dateLongue, site } from '../../data/site';
+
+export async function getStaticPaths() {
+  const tous = (await getCollection('webinaires')).sort((a, b) => +b.data.date - +a.data.date);
+  return tous.map((w, i) => ({
+    params: { id: w.id },
+    props: { w, i, recent: tous[i - 1], ancien: tous[i + 1] },
+  }));
+}
+
+const { w, i, recent, ancien } = Astro.props;
+const { Content } = await render(w);
+const d = w.data;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Event',
+  name: d.titre,
+  startDate: d.date.toISOString().slice(0, 10),
+  eventStatus: 'https://schema.org/EventScheduled',
+  eventAttendanceMode: 'https://schema.org/OnlineEventAttendanceMode',
+  location: { '@type': 'VirtualLocation', url: `${site.url}/webinaires/${w.id}/` },
+  organizer: { '@type': 'Organization', name: site.nom, url: site.url },
+  performer: d.intervenants.map((p) => ({ '@type': 'Person', name: p.nom })),
+  isAccessibleForFree: true,
+};
+---
+
+<Base titre={d.titre} description={`Webinaire de l’IBAE du ${dateLongue(d.date)}, avec ${d.intervenants.map((p) => p.nom).join(', ')}.`} jsonLd={jsonLd}>
+  <section class="fiche ciel">
+    <div class="conteneur fiche__grille">
+      <div class="fiche__affiche" style={`view-transition-name:affiche-${i}`}>
+        <Photo src={d.affiche} alt={d.alt} sizes="(max-width: 860px) 92vw, 44vw" largeurs={[320, 640]} eager />
+      </div>
+      <div class="fiche__texte">
+        <a class="retour" href="/webinaires/">Tous les webinaires</a>
+        {d.serie && <p class="serie">{d.serie}</p>}
+        <h1>{d.titre}</h1>
+        {d.sousTitre && <p class="sous-titre">{d.sousTitre}</p>}
+        <dl class="infos">
+          <div><dt>Date</dt><dd>{dateLongue(d.date)}</dd></div>
+          {d.heure && <div><dt>Heure</dt><dd>{d.heure}</dd></div>}
+          <div><dt>Format</dt><dd>{d.plateforme}</dd></div>
+          <div><dt>Participation</dt><dd>Gratuite</dd></div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section class="section detail">
+    <div class="conteneur detail__grille">
+      <div>
+        <h2>Le thème</h2>
+        <div class="corps"><Content /></div>
+        {d.citation && <blockquote class="main">{d.citation}</blockquote>}
+        {
+          d.replay && (
+            <a class="bouton bouton--nuit" href={d.replay} rel="noopener noreferrer" target="_blank">Voir le replay</a>
+          )
+        }
+      </div>
+      <div>
+        <h2>{d.intervenants.length > 1 ? 'Les intervenants' : 'L’intervenant'}</h2>
+        <ul class="personnes">
+          {d.intervenants.map((p) => <li><strong>{p.nom}</strong><span>{p.role}</span></li>)}
+          {d.moderateur && <li><strong>{d.moderateur.nom}</strong><span>Modérateur. {d.moderateur.role}</span></li>}
+        </ul>
+      </div>
+    </div>
+
+    {
+      d.chiffres.length > 0 && (
+        <div class="conteneur">
+          <h2 class="titre-chiffres">En chiffres</h2>
+          <dl class="stats">
+            {d.chiffres.map((c) => <div><dd data-compte>{c.valeur}</dd><dt>{c.libelle}</dt></div>)}
+          </dl>
+        </div>
+      )
+    }
+
+    <nav class="conteneur voisins" aria-label="Autres webinaires">
+      {ancien ? <a href={`/webinaires/${ancien.id}/`}><span>Webinaire précédent</span>{ancien.data.titre}</a> : <span></span>}
+      {recent && <a class="voisins__suiv" href={`/webinaires/${recent.id}/`}><span>Webinaire suivant</span>{recent.data.titre}</a>}
+    </nav>
+  </section>
+
+  <Fin />
+</Base>
+
+<style>
+  .fiche {
+    padding-block: clamp(112px, 12vw, 150px) clamp(44px, 6vw, 72px);
+  }
+
+  .fiche__grille {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) 1fr;
+    gap: clamp(24px, 5vw, 72px);
+    align-items: center;
+  }
+
+  .fiche__affiche :global(img) {
+    width: 100%;
+    box-shadow: 0 16px 34px rgb(4 13 26 / 0.45);
+  }
+
+  .fiche__texte {
+    display: grid;
+    gap: 14px;
+    justify-items: start;
+  }
+
+  .retour {
+    font-weight: 700;
+    color: var(--glacier);
+  }
+
+  .serie {
+    color: var(--or-bf);
+    font-weight: 700;
+  }
+
+  h1 {
+    font-size: clamp(2.1rem, 4.2vw, 3.6rem);
+    font-weight: 700;
+  }
+
+  .sous-titre {
+    font-size: 1.2rem;
+    color: var(--glacier-pale);
+  }
+
+  .infos {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px 28px;
+    width: 100%;
+    margin-top: 8px;
+    padding-top: 14px;
+    border-top: 1px solid rgb(193 226 247 / 0.35);
+  }
+
+  .infos dt {
+    color: var(--glacier);
+    font-size: 0.88rem;
+  }
+
+  .infos dd {
+    font-weight: 700;
+  }
+
+  .detail__grille {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: clamp(28px, 6vw, 88px);
+  }
+
+  .detail h2 {
+    margin-bottom: 14px;
+    font-size: clamp(1.6rem, 2.8vw, 2.2rem);
+  }
+
+  blockquote {
+    margin: 20px 0 0;
+    color: var(--ciel);
+  }
+
+  .personnes {
+    display: grid;
+    gap: 14px;
+  }
+
+  .personnes li {
+    display: grid;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #b7cde0;
+  }
+
+  .personnes strong {
+    font-size: 1.15rem;
+  }
+
+  .titre-chiffres {
+    margin-top: clamp(36px, 5vw, 60px);
+  }
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 14px;
+  }
+
+  .stats div {
+    padding: 16px 18px;
+    background: var(--glacier-pale);
+    border-left: 4px solid var(--cyan);
+  }
+
+  .stats dd {
+    font-size: clamp(1.9rem, 3.4vw, 2.8rem);
+    font-weight: 700;
+    line-height: 1.1;
+  }
+
+  .voisins {
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+    margin-top: clamp(40px, 6vw, 72px);
+  }
+
+  .voisins a {
+    display: grid;
+    max-width: 24em;
+    font-weight: 700;
+    line-height: 1.25;
+  }
+
+  .voisins a span {
+    color: var(--ciel);
+    font-size: 0.88rem;
+  }
+
+  .voisins__suiv {
+    margin-left: auto;
+    text-align: right;
+  }
+
+  @media (max-width: 860px) {
+    .fiche__grille,
+    .detail__grille {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

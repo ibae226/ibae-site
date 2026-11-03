@@ -1,0 +1,74 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import EnTete from '../../components/EnTete.astro';
+import Fin from '../../components/Fin.astro';
+import Photo from '../../components/Photo.astro';
+import { dateLongue } from '../../data/site';
+
+const actus = (await getCollection('actualites')).sort((a, b) => +b.data.date - +a.data.date);
+---
+
+<Base titre="Actualités" description="Les actualités de l’IBAE et de l’aéronautique et du spatial, au Burkina Faso et en Afrique.">
+  <EnTete titre="Actualités" intro="Nos activités, l’histoire de l’aviation africaine et les grandes nouvelles du spatial." />
+
+  <section class="section">
+    <div class="conteneur">
+      <ul class="liste">
+        {
+          actus.map((a, i) => (
+            <li data-revele style={`--delai:${(i % 3) * 0.08}s`}>
+              <a href={`/actualites/${a.id}/`}>
+                <Photo src={a.data.image} alt={a.data.alt} sizes="(max-width: 620px) 92vw, 400px" largeurs={[480, 800]} class="photo" />
+                <time datetime={a.data.date.toISOString().slice(0, 10)}>{dateLongue(a.data.date)}</time>
+                <h2>{a.data.titre}</h2>
+                <p>{a.data.resume}</p>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <Fin />
+</Base>
+
+<style>
+  .liste {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+    gap: clamp(22px, 3vw, 40px);
+  }
+
+  .liste a {
+    display: grid;
+    gap: 8px;
+    text-decoration: none;
+  }
+
+  .liste :global(.photo) {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    object-position: top;
+    transition: transform 0.3s ease;
+  }
+
+  .liste a:hover :global(.photo) {
+    transform: translateY(-5px);
+  }
+
+  time {
+    margin-top: 6px;
+    color: var(--ciel);
+    font-size: 0.92rem;
+    font-weight: 700;
+  }
+
+  h2 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    line-height: 1.18;
+  }
+</style>

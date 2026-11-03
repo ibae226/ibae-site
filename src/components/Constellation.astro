@@ -1,0 +1,124 @@
+---
+// Contour réel du Burkina Faso (Natural Earth), simplifié en constellation.
+// L'étoile dorée du drapeau marque Ouagadougou.
+import donnees from '../data/burkina-constellation.json';
+
+interface Props {
+  class?: string;
+  anime?: boolean;
+}
+
+const { class: classe = '', anime = false } = Astro.props;
+const { largeur, hauteur, points, ouagadougou } = donnees;
+const marge = 30;
+const trace = `M${points.map(([x, y]) => `${x} ${y}`).join('L')}Z`;
+
+const etoile = (cx: number, cy: number, r: number) => {
+  const sommets: string[] = [];
+  for (let i = 0; i < 10; i++) {
+    const rayon = i % 2 === 0 ? r : r * 0.42;
+    const angle = (Math.PI / 5) * i - Math.PI / 2;
+    sommets.push(`${(cx + rayon * Math.cos(angle)).toFixed(1)} ${(cy + rayon * Math.sin(angle)).toFixed(1)}`);
+  }
+  return `M${sommets.join('L')}Z`;
+};
+---
+
+<svg
+  class:list={['constellation', classe, { 'constellation--anime': anime }]}
+  viewBox={`${-marge} ${-marge} ${largeur + 2 * marge} ${hauteur + 2 * marge}`}
+  aria-hidden="true"
+  focusable="false"
+>
+  <path class="constellation__trait" d={trace} pathLength="1"></path>
+  {
+    points.map(([x, y], i) => (
+      <path
+        class="constellation__etoile"
+        d={etoile(x, y, i % 3 === 0 ? 15 : 10)}
+        style={`--i:${i}`}
+      />
+    ))
+  }
+  <circle class="constellation__halo" cx={ouagadougou[0]} cy={ouagadougou[1]} r="30"></circle>
+  <path class="constellation__or" d={etoile(ouagadougou[0], ouagadougou[1], 30)}></path>
+</svg>
+
+<style>
+  .constellation {
+    overflow: visible;
+  }
+
+  .constellation__trait {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.6;
+    stroke-opacity: 0.5;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .constellation__etoile {
+    fill: currentColor;
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: scintiller 5s calc(var(--i) * -0.7s) ease-in-out infinite;
+  }
+
+  .constellation__or {
+    fill: var(--or-bf);
+  }
+
+  .constellation__halo {
+    fill: none;
+    stroke: var(--or-bf);
+    stroke-width: 2;
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: onde 3.2s ease-out infinite;
+  }
+
+  .constellation--anime .constellation__trait {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    animation: tracer 2.2s 0.2s cubic-bezier(0.45, 0.05, 0.25, 1) forwards;
+  }
+
+  @keyframes tracer {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  @keyframes scintiller {
+    0%,
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.45;
+      transform: scale(0.72);
+    }
+  }
+
+  @keyframes onde {
+    from {
+      opacity: 0.9;
+      transform: scale(0.8);
+    }
+    to {
+      opacity: 0;
+      transform: scale(3.2);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .constellation--anime .constellation__trait {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  :global(.calme) .constellation--anime .constellation__trait {
+    stroke-dashoffset: 0;
+  }
+</style>

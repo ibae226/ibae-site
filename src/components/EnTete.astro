@@ -1,0 +1,55 @@
+---
+// En-tête des pages intérieures.
+import Constellation from './Constellation.astro';
+
+interface Props {
+  titre: string;
+  fort?: string;
+  intro?: string;
+}
+
+const { titre, fort, intro } = Astro.props;
+---
+
+<section class="tete ciel">
+  <Constellation class="tete__constellation" />
+  <div class="conteneur tete__grille">
+    <h1>{titre} {fort && <strong>{fort}</strong>}</h1>
+    {intro && <p>{intro}</p>}
+    <slot />
+  </div>
+</section>
+
+<style>
+  .tete {
+    position: relative;
+    overflow: hidden;
+    padding-block: clamp(128px, 14vw, 176px) clamp(56px, 7vw, 92px);
+  }
+
+  .tete :global(.tete__constellation) {
+    position: absolute;
+    right: -14vw;
+    top: 70px;
+    width: min(60vw, 800px);
+    color: var(--glacier);
+    opacity: 0.42;
+  }
+
+  .tete__grille {
+    position: relative;
+    display: grid;
+    gap: 18px;
+    justify-items: start;
+  }
+
+  h1 {
+    max-width: 13em;
+    font-size: clamp(2.5rem, 5.4vw, 4.8rem);
+  }
+
+  p {
+    max-width: 38em;
+    color: var(--glacier-pale);
+  }
+</style>

@@ -1,0 +1,157 @@
+---
+import { site } from '../data/site';
+
+const annee = new Date().getFullYear();
+const reseaux = [
+  { nom: 'LinkedIn', href: site.reseaux.linkedin },
+  { nom: 'Instagram', href: site.reseaux.instagram },
+  { nom: 'Chaîne WhatsApp', href: site.reseaux.whatsapp },
+  { nom: 'Facebook', href: site.reseaux.facebook },
+].filter((r) => r.href);
+---
+
+<footer class="pied">
+  <span class="fil-drapeau" aria-hidden="true"></span>
+  <div class="conteneur pied__grille">
+    <div>
+      <p class="pied__nom">{site.nom}</p>
+      <p class="pied__statut">Association burkinabè à but non lucratif, fondée en décembre 2024.</p>
+      <p class="pied__fierte">
+        <span class="etoile" aria-hidden="true"></span>
+        Fait par des Burkinabè, pour le Burkina Faso.
+      </p>
+    </div>
+
+    <nav aria-label="Site">
+      <p class="pied__titre">Le site</p>
+      <ul>
+        <li><a href="/a-propos/">À propos</a></li>
+        <li><a href="/projets/">Projets</a></li>
+        <li><a href="/webinaires/">Webinaires</a></li>
+        <li><a href="/orientation/">S’orienter</a></li>
+        <li><a href="/actualites/">Actualités</a></li>
+      </ul>
+    </nav>
+
+    <nav aria-label="Participer">
+      <p class="pied__titre">Participer</p>
+      <ul>
+        <li><a href="/adhesion/">Adhérer</a></li>
+        <li><a href="/partenaires/">Devenir partenaire</a></li>
+        <li><a href="/contact/">Nous écrire</a></li>
+      </ul>
+    </nav>
+
+    <div>
+      <p class="pied__titre">Nous suivre</p>
+      <ul>
+        {reseaux.map((r) => <li><a href={r.href} rel="noopener noreferrer" target="_blank">{r.nom}</a></li>)}
+      </ul>
+    </div>
+  </div>
+
+  <div class="conteneur pied__mentions">
+    <p>© {annee} IBAE</p>
+    <ul>
+      <li><a href="/mentions-legales/">Mentions légales</a></li>
+      <li><a href="/confidentialite/">Confidentialité</a></li>
+      <li><a href="/cookies/">Cookies</a></li>
+      <li><button type="button" data-cookies-ouvrir>Gérer les cookies</button></li>
+      <li><button type="button" data-calme>Mettre les animations en pause</button></li>
+    </ul>
+  </div>
+</footer>
+
+<style>
+  .pied {
+    background: var(--encre);
+    color: var(--glacier);
+    font-size: 0.98rem;
+  }
+
+  .pied__grille {
+    display: grid;
+    grid-template-columns: 1.7fr 0.8fr 0.8fr 0.9fr;
+    gap: 32px;
+    padding-top: 52px;
+  }
+
+  .pied__nom {
+    max-width: 26ch;
+    color: var(--blanc);
+    font-weight: 700;
+  }
+
+  .pied__statut {
+    margin-top: 8px;
+    max-width: 38ch;
+  }
+
+  .pied__fierte {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 14px;
+    color: var(--blanc);
+  }
+
+  .pied__fierte .etoile {
+    color: var(--or-bf);
+  }
+
+  .pied__titre {
+    margin-bottom: 8px;
+    color: var(--blanc);
+    font-weight: 700;
+  }
+
+  .pied li + li {
+    margin-top: 5px;
+  }
+
+  .pied a {
+    text-decoration-color: rgb(193 226 247 / 0.45);
+  }
+
+  .pied__mentions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 8px 32px;
+    padding-block: 40px 26px;
+    font-size: 0.86rem;
+    color: #9cc4de;
+  }
+
+  .pied__mentions ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 20px;
+  }
+
+  .pied__mentions li + li {
+    margin-top: 0;
+  }
+
+  .pied__mentions button {
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    text-decoration: underline;
+    text-decoration-color: rgb(193 226 247 / 0.45);
+    text-underline-offset: 0.18em;
+    cursor: pointer;
+  }
+
+  @media (max-width: 820px) {
+    .pied__grille {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .pied__grille > :first-child {
+      grid-column: 1 / -1;
+    }
+  }
+</style>

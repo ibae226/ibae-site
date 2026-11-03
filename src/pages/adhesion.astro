@@ -1,0 +1,312 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import EnTete from '../components/EnTete.astro';
+import Fin from '../components/Fin.astro';
+import logo from '../assets/marque/logo-ibae.png';
+
+const statuts = ['Lycéen ou lycéenne', 'Étudiant ou étudiante', 'Jeune diplômé ou diplômée', 'Professionnel ou professionnelle', 'Sympathisant ou sympathisante'];
+const poles = ['Communication', 'Événements', 'Technique et projets', 'Partenariats', 'Mentorat', 'Présence sur le terrain au Burkina'];
+const etapes = [
+  { titre: 'Vous remplissez le formulaire', texte: 'Quelques informations sur vous et sur ce que vous voulez apporter.' },
+  { titre: 'Nous étudions votre demande', texte: 'Le Secrétaire Général revient vers vous par email ou par WhatsApp.' },
+  { titre: 'Vous rejoignez l’équipage', texte: 'Nous vous communiquons le montant de la cotisation et vous accueillons parmi nos membres.' },
+];
+---
+
+<Base titre="Adhérer" description="Devenez membre de l’IBAE et participez au développement de l’aéronautique et du spatial au Burkina Faso.">
+  <EnTete
+    titre="Prenez place"
+    fort="à bord de l’IBAE"
+    intro="Nos membres organisent les activités, partagent ce qu’ils savent et portent nos projets. Que vous soyez au Burkina Faso ou dans la diaspora, il y a une place pour vous."
+  />
+
+  <section class="etapes pale">
+    <ol class="conteneur etapes__liste">
+      {
+        etapes.map((e, i) => (
+          <li data-revele style={`--delai:${i * 0.1}s`}>
+            <span class="etapes__n">{i + 1}</span>
+            <div>
+              <h2>{e.titre}</h2>
+              <p>{e.texte}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <section class="section adhesion">
+    <div class="conteneur adhesion__grille">
+      <form class="formulaire" data-formulaire action="/api/formulaire" method="post" data-merci="Merci. Votre demande d’adhésion est bien envoyée, nous revenons vers vous rapidement.">
+        <input type="hidden" name="formulaire" value="adhesion" />
+        <input type="hidden" name="t0" value="" />
+        <div class="piege" aria-hidden="true">
+          <label>Site web <input type="text" name="site_web" tabindex="-1" autocomplete="off" /></label>
+        </div>
+
+        <h2>Formulaire d’adhésion</h2>
+
+        <fieldset>
+          <legend>Vous</legend>
+          <div class="champ">
+            <label for="a-nom">Nom et prénom</label>
+            <input id="a-nom" name="nom" required maxlength="120" autocomplete="name" />
+          </div>
+          <div class="duo">
+            <div class="champ">
+              <label for="a-email">Email</label>
+              <input id="a-email" name="email" type="email" required maxlength="160" autocomplete="email" />
+            </div>
+            <div class="champ">
+              <label for="a-tel">Téléphone ou WhatsApp</label>
+              <input id="a-tel" name="telephone" type="tel" required maxlength="40" autocomplete="tel" placeholder="+226" />
+            </div>
+          </div>
+          <div class="duo">
+            <div class="champ">
+              <label for="a-ville">Ville</label>
+              <input id="a-ville" name="ville" required maxlength="80" autocomplete="address-level2" />
+            </div>
+            <div class="champ">
+              <label for="a-pays">Pays de résidence</label>
+              <input id="a-pays" name="pays" required maxlength="80" autocomplete="country-name" value="Burkina Faso" />
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Votre parcours</legend>
+          <div class="champ">
+            <label for="a-statut">Vous êtes</label>
+            <select id="a-statut" name="statut" required>
+              <option value="">Choisir</option>
+              {statuts.map((s) => <option>{s}</option>)}
+            </select>
+          </div>
+          <div class="champ">
+            <label for="a-org">École, université ou entreprise</label>
+            <input id="a-org" name="organisation" maxlength="120" />
+          </div>
+          <div class="champ">
+            <label for="a-dom">Domaine d’études ou de travail</label>
+            <input id="a-dom" name="domaine" maxlength="120" />
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Votre engagement</legend>
+          <div class="champ">
+            <span class="champ__titre" id="a-poles">Où voulez-vous aider ?</span>
+            <div class="coches" role="group" aria-labelledby="a-poles">
+              {poles.map((p) => <label class="coche"><input type="checkbox" name="poles" value={p} /><span>{p}</span></label>)}
+            </div>
+          </div>
+          <div class="champ">
+            <label for="a-motiv">Pourquoi voulez-vous rejoindre l’IBAE ?</label>
+            <textarea id="a-motiv" name="motivation" required maxlength="1500"></textarea>
+          </div>
+        </fieldset>
+
+        <label class="coche">
+          <input type="checkbox" name="consentement" value="oui" required />
+          <span>
+            J’accepte que l’IBAE utilise ces informations pour traiter mon adhésion, selon la <a href="/confidentialite/">politique de confidentialité</a>.
+            Si j’ai moins de 18 ans, un parent ou un tuteur est d’accord.
+          </span>
+        </label>
+
+        <div class="actions">
+          <button type="submit" class="bouton bouton--nuit">Envoyer ma demande</button>
+        </div>
+        <p class="etat" data-etat role="status"></p>
+      </form>
+
+      <aside class="carte-embarquement" data-carte aria-label="Aperçu de votre carte de membre">
+        <div class="ce__haut">
+          <Image src={logo} alt="" width={56} height={56} widths={[56, 112]} sizes="56px" />
+          <div>
+            <p class="ce__titre">Carte d’embarquement</p>
+            <p class="ce__sous">Vol IBAE</p>
+          </div>
+        </div>
+        <div class="ce__route">
+          <div><span>Départ</span><strong>BF</strong></div>
+          <svg viewBox="0 0 80 20" aria-hidden="true"><path d="M0 10h70" /><path d="M64 3l10 7-10 7" /></svg>
+          <div class="ce__droite"><span>Destination</span><strong class="ce__etoiles">Les étoiles</strong></div>
+        </div>
+        <dl>
+          <div><dt>Passager</dt><dd data-carte-nom>Votre nom</dd></div>
+          <div><dt>Embarquement</dt><dd data-carte-ville>Votre ville</dd></div>
+          <div><dt>Statut</dt><dd data-carte-statut>Votre statut</dd></div>
+        </dl>
+        <p class="main ce__devise"><span lang="mos">Hal yĩngr ãdse</span></p>
+        <span class="fil-drapeau" aria-hidden="true"></span>
+      </aside>
+    </div>
+  </section>
+
+  <Fin />
+</Base>
+
+<style>
+  .etapes {
+    padding-block: clamp(30px, 4vw, 48px);
+  }
+
+  .etapes__liste {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: clamp(16px, 3vw, 36px);
+  }
+
+  .etapes li {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 12px;
+  }
+
+  .etapes__n {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: var(--ciel);
+    color: var(--blanc);
+    font-weight: 700;
+  }
+
+  .etapes h2 {
+    margin-bottom: 4px;
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: 0;
+    line-height: 1.2;
+  }
+
+  .etapes p {
+    font-size: 0.97rem;
+  }
+
+  .adhesion__grille {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    gap: clamp(28px, 5vw, 72px);
+    align-items: start;
+  }
+
+  .formulaire h2 {
+    font-size: clamp(1.7rem, 3vw, 2.4rem);
+  }
+
+  .carte-embarquement {
+    position: sticky;
+    top: 104px;
+    display: grid;
+    gap: 16px;
+    padding: 22px 22px 0;
+    background: var(--nuit);
+    color: var(--blanc);
+    box-shadow: var(--ombre-feuille);
+    transform: rotate(1.4deg);
+    transition: transform 0.3s ease;
+    overflow: hidden;
+  }
+
+  .carte-embarquement:hover {
+    transform: rotate(0);
+  }
+
+  .ce__haut {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .ce__titre {
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .ce__sous {
+    color: var(--glacier);
+    font-size: 0.9rem;
+  }
+
+  .ce__route {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 12px;
+    padding-block: 14px;
+    border-block: 1px dashed rgb(193 226 247 / 0.45);
+  }
+
+  .ce__route span,
+  dt {
+    display: block;
+    color: var(--glacier);
+    font-size: 0.82rem;
+  }
+
+  .ce__route strong {
+    font-size: 2rem;
+    line-height: 1.1;
+  }
+
+  .ce__route .ce__etoiles {
+    font-size: 1.3rem;
+    color: var(--or-bf);
+  }
+
+  .ce__droite {
+    text-align: right;
+  }
+
+  .ce__route svg {
+    width: 100%;
+    height: 20px;
+    fill: none;
+    stroke: var(--cyan);
+    stroke-width: 2;
+  }
+
+  dl {
+    display: grid;
+    gap: 10px;
+  }
+
+  dd {
+    overflow-wrap: anywhere;
+    font-size: 1.1rem;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .ce__devise {
+    color: var(--glacier);
+    text-align: right;
+  }
+
+  .carte-embarquement .fil-drapeau {
+    margin-inline: -22px;
+  }
+
+  @media (max-width: 960px) {
+    .adhesion__grille {
+      grid-template-columns: 1fr;
+    }
+
+    .carte-embarquement {
+      position: static;
+      order: -1;
+      transform: none;
+    }
+
+    .etapes__liste {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

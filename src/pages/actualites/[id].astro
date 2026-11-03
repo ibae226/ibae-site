@@ -1,0 +1,91 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Fin from '../../components/Fin.astro';
+import Photo from '../../components/Photo.astro';
+import { dateLongue } from '../../data/site';
+
+export async function getStaticPaths() {
+  const tous = await getCollection('actualites');
+  return tous.map((a) => ({ params: { id: a.id }, props: { a } }));
+}
+
+const { a } = Astro.props;
+const { Content } = await render(a);
+---
+
+<Base titre={a.data.titre} description={a.data.resume}>
+  <section class="article-tete ciel">
+    <div class="conteneur">
+      <a class="retour" href="/actualites/">Toutes les actualités</a>
+      <time datetime={a.data.date.toISOString().slice(0, 10)}>{dateLongue(a.data.date)}</time>
+      <h1>{a.data.titre}</h1>
+    </div>
+  </section>
+
+  <article class="section">
+    <div class="conteneur article">
+      <div class="corps"><Content /></div>
+      <figure>
+        <Photo src={a.data.image} alt={a.data.alt} sizes="(max-width: 860px) 92vw, 40vw" largeurs={[480, 800]} />
+        {a.data.credit && <figcaption>{a.data.credit}</figcaption>}
+      </figure>
+    </div>
+  </article>
+
+  <Fin />
+</Base>
+
+<style>
+  .article-tete {
+    padding-block: clamp(120px, 13vw, 160px) clamp(36px, 5vw, 60px);
+  }
+
+  .article-tete .conteneur {
+    display: grid;
+    gap: 12px;
+    justify-items: start;
+  }
+
+  .retour {
+    font-weight: 700;
+    color: var(--glacier);
+  }
+
+  time {
+    color: var(--or-bf);
+    font-weight: 700;
+  }
+
+  h1 {
+    max-width: 18em;
+    font-size: clamp(2.1rem, 4.4vw, 3.8rem);
+    font-weight: 700;
+  }
+
+  .article {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: clamp(28px, 5vw, 72px);
+    align-items: start;
+  }
+
+  .corps :global(p) {
+    margin-bottom: 1em;
+  }
+
+  figure :global(img) {
+    width: 100%;
+  }
+
+  figcaption {
+    margin-top: 6px;
+    font-size: 0.86rem;
+  }
+
+  @media (max-width: 860px) {
+    .article {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

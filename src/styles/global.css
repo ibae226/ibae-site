@@ -1,0 +1,467 @@
+/* Palette relevée sur les visuels du graphiste de la JBAE, et couleurs du drapeau. */
+:root {
+  --encre: #040d1a;
+  --nuit: #0e2844;
+  --ciel: #194b84;
+  --ciel-clair: #2d6096;
+  --azur: #3a80cc;
+  --glacier: #c1e2f7;
+  --glacier-pale: #e7f3fb;
+  --cyan: #03acc2;
+  --blanc: #ffffff;
+  --rouge-bf: #ef2b2d;
+  --vert-bf: #009e49;
+  --or-bf: #fcd116;
+
+  --texte: 'IBM Plex Sans', system-ui, sans-serif;
+  --main: 'Caveat', 'IBM Plex Sans', cursive;
+
+  --marge: clamp(16px, 5.5vw, 88px);
+  --section: clamp(64px, 10vw, 128px);
+  --largeur: 1320px;
+
+  --ombre-feuille: 7px 12px 24px rgb(4 13 26 / 0.34);
+
+  --chevrons: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='44'%3E%3Cpath d='M0 11 11 0l11 11L33 0l11 11M0 33l11-11 11 11 11-11 11 11' fill='none' stroke='%23fff' stroke-opacity='.055'/%3E%3C/svg%3E");
+}
+
+@view-transition {
+  navigation: auto;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+  background: var(--encre);
+}
+
+body {
+  margin: 0;
+  font-family: var(--texte);
+  font-size: clamp(1.0625rem, 1rem + 0.2vw, 1.1875rem);
+  line-height: 1.55;
+  color: var(--nuit);
+  background: var(--blanc);
+  overflow-x: clip;
+  -webkit-font-smoothing: antialiased;
+}
+
+img,
+svg,
+canvas {
+  display: block;
+  max-width: 100%;
+}
+
+img {
+  height: auto;
+}
+
+picture {
+  display: block;
+}
+
+h1,
+h2,
+h3,
+p,
+ul,
+ol,
+dl,
+dd,
+figure {
+  margin: 0;
+}
+
+ul,
+ol {
+  padding: 0;
+  list-style: none;
+}
+
+h1,
+h2,
+h3 {
+  font-weight: 300;
+  line-height: 1.06;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+h1 strong,
+h2 strong {
+  display: block;
+  font-weight: 700;
+}
+
+h2 {
+  font-size: clamp(2rem, 4.4vw, 3.5rem);
+}
+
+h3 {
+  font-size: clamp(1.4rem, 2.2vw, 1.85rem);
+}
+
+p {
+  max-width: 62ch;
+  text-wrap: pretty;
+}
+
+a {
+  color: inherit;
+  text-underline-offset: 0.18em;
+  text-decoration-thickness: 1px;
+}
+
+a:hover {
+  text-decoration-thickness: 2px;
+}
+
+:focus-visible {
+  outline: 3px solid var(--cyan);
+  outline-offset: 3px;
+}
+
+.lien-evitement {
+  position: absolute;
+  left: 16px;
+  top: -80px;
+  z-index: 60;
+  padding: 10px 16px;
+  background: var(--blanc);
+  color: var(--nuit);
+}
+
+.lien-evitement:focus {
+  top: 12px;
+}
+
+.conteneur {
+  width: min(100%, calc(var(--largeur) + 2 * var(--marge)));
+  margin-inline: auto;
+  padding-inline: var(--marge);
+}
+
+.section {
+  padding-block: var(--section);
+}
+
+/* Fond de ciel : texture à chevrons des visuels de la JBAE */
+.ciel {
+  color: var(--blanc);
+  background:
+    var(--chevrons),
+    radial-gradient(70% 90% at 72% 18%, var(--ciel-clair) 0%, transparent 70%),
+    linear-gradient(180deg, var(--ciel) 0%, var(--nuit) 100%);
+}
+
+.pale {
+  background: var(--glacier-pale);
+}
+
+/* Écriture à la main, pour les légendes */
+.main {
+  font-family: var(--main);
+  font-weight: 500;
+  font-size: 1.45em;
+  line-height: 1.15;
+  letter-spacing: 0;
+}
+
+/* Feuille de papier : bord droit et ombre portée */
+.feuille {
+  position: relative;
+  z-index: 5;
+  background: var(--glacier);
+  color: var(--nuit);
+  box-shadow: var(--ombre-feuille);
+}
+
+/* Boutons */
+.bouton {
+  display: inline-block;
+  padding: 0.72em 1.25em;
+  border: 0;
+  font: inherit;
+  font-weight: 700;
+  line-height: 1.2;
+  text-decoration: none;
+  cursor: pointer;
+  border-radius: 0.3em 0.3em 1.1em 0.3em;
+  transition: background-color 0.18s ease, color 0.18s ease, transform 0.18s ease;
+}
+
+.bouton:hover {
+  transform: translateY(-2px);
+}
+
+.bouton--plein {
+  background: var(--cyan);
+  color: var(--encre);
+}
+
+.bouton--plein:hover {
+  background: var(--or-bf);
+}
+
+.bouton--contour {
+  background: transparent;
+  color: inherit;
+  box-shadow: inset 0 0 0 1.5px currentColor;
+}
+
+.bouton--contour:hover {
+  background: var(--glacier);
+  color: var(--nuit);
+  box-shadow: inset 0 0 0 1.5px var(--glacier);
+}
+
+.bouton--nuit {
+  background: var(--nuit);
+  color: var(--blanc);
+}
+
+.bouton--nuit:hover {
+  background: var(--ciel);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+/* Fil tricolore tiré du drapeau */
+.fil-drapeau {
+  display: block;
+  height: 6px;
+  background: linear-gradient(180deg, var(--rouge-bf) 50%, var(--vert-bf) 50%);
+}
+
+/* Étoile */
+.etoile {
+  display: inline-block;
+  width: 0.85em;
+  height: 0.85em;
+  background: currentColor;
+  clip-path: polygon(50% 0, 62% 35%, 98% 35%, 69% 57%, 79% 91%, 50% 71%, 21% 91%, 31% 57%, 2% 35%, 38% 35%);
+}
+
+/* Apparitions au défilement, seulement si le JavaScript est actif */
+.js [data-revele] {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+  transition-delay: var(--delai, 0s);
+}
+
+/* Le masque est sur l'enfant : masqué lui-même, l'élément ne serait jamais détecté à l'écran. */
+.js [data-revele='photo'] {
+  opacity: 1;
+  transform: none;
+}
+
+.js [data-revele='photo'] > * {
+  clip-path: inset(0 0 100% 0);
+  transition: clip-path 0.9s cubic-bezier(0.65, 0, 0.2, 1);
+  transition-delay: var(--delai, 0s);
+}
+
+.js [data-revele].vu {
+  opacity: 1;
+  transform: none;
+}
+
+.js [data-revele='photo'].vu > * {
+  clip-path: inset(0 0 0 0);
+}
+
+/* Formulaires */
+.formulaire {
+  display: grid;
+  gap: 18px;
+}
+
+.formulaire fieldset {
+  display: grid;
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.formulaire legend {
+  padding: 0;
+  margin-bottom: 4px;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.champ {
+  display: grid;
+  gap: 5px;
+}
+
+.champ label,
+.champ__titre {
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.champ small {
+  color: #3e5873;
+  font-size: 0.86rem;
+}
+
+.champ input,
+.champ select,
+.champ textarea {
+  width: 100%;
+  padding: 0.68em 0.8em;
+  border: 1.5px solid #7f9ab5;
+  border-radius: 4px;
+  background: var(--blanc);
+  color: var(--nuit);
+  font: inherit;
+}
+
+.champ textarea {
+  min-height: 150px;
+  resize: vertical;
+}
+
+.champ input:focus,
+.champ select:focus,
+.champ textarea:focus {
+  border-color: var(--ciel);
+  outline: 3px solid rgb(3 172 194 / 0.35);
+  outline-offset: 0;
+}
+
+.duo {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.coches {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px 16px;
+}
+
+.coche {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  font-size: 0.97rem;
+  line-height: 1.35;
+}
+
+.coche input {
+  flex: none;
+  width: 19px;
+  height: 19px;
+  margin-top: 2px;
+  accent-color: var(--ciel);
+}
+
+.piege {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.etat {
+  min-height: 1.5em;
+  font-weight: 700;
+}
+
+.etat[data-type='erreur'] {
+  color: #a51518;
+}
+
+.etat[data-type='ok'] {
+  color: #006b32;
+}
+
+/* Texte long des pages légales */
+.texte-long {
+  max-width: 74ch;
+}
+
+.texte-long h2 {
+  margin-top: 1.5em;
+  margin-bottom: 0.4em;
+  font-size: clamp(1.5rem, 2.6vw, 2rem);
+}
+
+.texte-long p,
+.texte-long ul {
+  margin-bottom: 0.9em;
+}
+
+.texte-long ul {
+  padding-left: 1.2em;
+  list-style: disc;
+}
+
+@media (max-width: 680px) {
+  .duo,
+  .coches {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Mouvement réduit : préférence du système ou bouton du pied de page */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .js [data-revele],
+  .js [data-revele='photo'] {
+    opacity: 1;
+    transform: none;
+  }
+
+  .js [data-revele='photo'] > * {
+    clip-path: none;
+  }
+}
+
+.calme {
+  scroll-behavior: auto;
+}
+
+.calme *,
+.calme *::before,
+.calme *::after {
+  animation: none !important;
+  transition: none !important;
+}
+
+.calme [data-revele],
+.calme [data-revele='photo'] {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+.calme [data-revele='photo'] > * {
+  clip-path: none !important;
+}
