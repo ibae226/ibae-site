@@ -7,9 +7,10 @@ import { dateLongue, site } from '../../data/site';
 
 export async function getStaticPaths() {
   const tous = (await getCollection('webinaires')).sort((a, b) => +b.data.date - +a.data.date);
-  return tous.map((w, i) => ({
+  const publics = tous.filter((w) => !w.data.prive);
+  return publics.map((w, n) => ({
     params: { id: w.id },
-    props: { w, i, recent: tous[i - 1], ancien: tous[i + 1] },
+    props: { w, i: tous.indexOf(w), recent: publics[n - 1], ancien: publics[n + 1] },
   }));
 }
 

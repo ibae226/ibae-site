@@ -10,4 +10,4 @@ lienTexte: Voir tous les webinaires
 ---
 Depuis avril 2025, nous organisons des webinaires gratuits sur les parcours, les études, les bourses et les technologies du secteur.
 
-Le premier a rassemblé plus de 300 inscrits. En 2026, nous avons lancé une série d’orientation pour aider les jeunes à choisir leur voie.
+Le premier a rassemblé plus de 300 inscrits. En 2026, nous avons lancé une série d’orientation pour aider les jeunes à choisir leur voie. Au total, nos webinaires ont réuni plus de 700 participants pour plus de 15 heures d’échanges.

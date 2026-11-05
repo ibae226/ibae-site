@@ -20,15 +20,21 @@ Un lien ou un champ légal laissé vide est masqué sur le site.
 
 Dépose un portrait dans `src/assets/equipe/`, nommé comme l'identifiant `id` du membre dans `src/data/site.ts`, par exemple `salvador-lompo.jpg`. Il remplace tout seul la silhouette provisoire.
 
+### Aperçus de partage
+
+Les images affichées sur WhatsApp et les réseaux sont dans `public/apercus/`. Leur nom suit l'adresse de la page : `adhesion.jpg` pour `/adhesion/`, `webinaires/2026-07-18-quelles-etudes.jpg` pour la page de ce webinaire. Sans image à ce nom, la page utilise `accueil.jpg`. Format : JPG de 1200 x 630 pixels, moins de 300 Ko.
+
 ### Ajouter un webinaire
 
 1. Mets l'affiche dans `src/assets/webinaires/`.
 2. Copie un fichier de `src/content/webinaires/` et renomme-le avec la date, par exemple `2026-11-14-mon-theme.md`.
 3. Change le titre, la date, l'affiche, les intervenants et le texte. Ajoute les `chiffres` et le lien `replay` si tu les as. Ils n'apparaissent que s'ils sont remplis.
 
-La page, la tuile, les statistiques de la page Webinaires et le précédent/suivant se mettent à jour tout seuls.
+La page, la tuile, le nombre de webinaires et le précédent/suivant se mettent à jour tout seuls. Les participants et les heures de la page Webinaires se changent à la main dans `src/pages/webinaires/index.astro`.
 
-Chaque modification envoyée sur la branche `main` republie le site automatiquement.
+Pour une rencontre privée, ajoute `prive: true`. Elle garde sa tuile, sans lien ni page. Pour la rendre publique, retire cette ligne, puis renseigne l'affiche, les intervenants et le texte.
+
+Chaque modification envoyée sur la branche `main` republie le site automatiquement. Le plus simple est de double-cliquer sur `publier.cmd`.
 
 ## Travailler sur le site en local
 

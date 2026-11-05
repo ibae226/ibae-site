@@ -33,6 +33,7 @@ const webinaires = defineCollection({
       affiche: image(),
       alt: z.string(),
       intervenants: z.array(personne),
+      prive: z.boolean().default(false),
       moderateur: personne.optional(),
       chiffres: z.array(z.object({ valeur: z.string(), libelle: z.string() })).default([]),
       citation: z.string().optional(),

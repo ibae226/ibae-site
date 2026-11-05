@@ -23,7 +23,7 @@ const photosMissions = [
 ];
 
 const projets = (await getCollection('projets')).sort((a, b) => a.data.ordre - b.data.ordre);
-const webinaires = (await getCollection('webinaires')).sort((a, b) => +b.data.date - +a.data.date);
+const webinaires = (await getCollection('webinaires', (w) => !w.data.prive)).sort((a, b) => +b.data.date - +a.data.date);
 const actualites = (await getCollection('actualites')).sort((a, b) => +b.data.date - +a.data.date).slice(0, 3);
 const mots = ['Aéronautique', 'Spatial', 'Drones', 'Satellites', 'Orientation', 'Mentorat', 'Burkina Faso'];
 ---

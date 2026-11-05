@@ -8,7 +8,6 @@ import { dateLongue, site } from '../../data/site';
 
 const webinaires = (await getCollection('webinaires')).sort((a, b) => +b.data.date - +a.data.date);
 const annees = [...new Set(webinaires.map((w) => w.data.date.getUTCFullYear()))];
-const intervenants = new Set(webinaires.flatMap((w) => w.data.intervenants.map((i) => i.nom))).size;
 ---
 
 <Base
@@ -21,9 +20,9 @@ const intervenants = new Set(webinaires.flatMap((w) => w.data.intervenants.map((
     intro="Des experts, des ingénieurs et des étudiants partagent leur parcours et répondent à vos questions. Cliquez sur une affiche pour en savoir plus."
   >
     <dl class="bilan">
-      <div><dd data-compte>{webinaires.length}</dd><dt>webinaires présentés ici</dt></div>
-      <div><dd data-compte>{intervenants}</dd><dt>intervenants</dt></div>
-      <div><dd data-compte>300+</dd><dt>inscrits au premier rendez-vous</dt></div>
+      <div><dd data-compte>{webinaires.length}</dd><dt>webinaires</dt></div>
+      <div><dd data-compte>700+</dd><dt>participants</dt></div>
+      <div><dd data-compte>15+</dd><dt>heures d’échanges</dt></div>
     </dl>
   </EnTete>
 
@@ -36,20 +35,24 @@ const intervenants = new Set(webinaires.flatMap((w) => w.data.intervenants.map((
 
       <ul class="grille">
         {
-          webinaires.map((w, i) => (
+          webinaires.map((w, i) => {
+            // Une rencontre privée garde sa tuile, sans lien ni page.
+            const Tuile = w.data.prive ? 'div' : 'a';
+            return (
             <li data-annee={w.data.date.getUTCFullYear()} data-revele style={`--delai:${(i % 3) * 0.08}s`}>
-              <a class="tuile" href={`/webinaires/${w.id}/`}>
+              <Tuile class="tuile" href={w.data.prive ? undefined : `/webinaires/${w.id}/`}>
                 <div class="tuile__image" style={`view-transition-name:affiche-${i}`}>
                   <Photo src={w.data.affiche} alt={w.data.alt} sizes="(max-width: 620px) 92vw, (max-width: 1000px) 46vw, 400px" largeurs={[320, 640]} />
                 </div>
                 <div class="tuile__texte">
                   <time datetime={w.data.date.toISOString().slice(0, 10)}>{dateLongue(w.data.date)}</time>
                   <h2>{w.data.titre}</h2>
-                  <p>{w.data.intervenants.map((p) => p.nom).join(', ')}</p>
+                  <p>{w.data.prive ? w.data.sousTitre : w.data.intervenants.map((p) => p.nom).join(', ')}</p>
                 </div>
-              </a>
+              </Tuile>
             </li>
-          ))
+            );
+          })
         }
       </ul>
     </div>
@@ -135,8 +138,8 @@ const intervenants = new Set(webinaires.flatMap((w) => w.data.intervenants.map((
     transition: transform 0.25s cubic-bezier(0.2, 0.7, 0.2, 1), box-shadow 0.25s ease;
   }
 
-  .tuile:hover,
-  .tuile:focus-visible {
+  a.tuile:hover,
+  a.tuile:focus-visible {
     transform: translateY(-8px) rotate(-0.6deg);
     box-shadow: 0 18px 34px rgb(14 40 68 / 0.24);
   }
@@ -154,7 +157,7 @@ const intervenants = new Set(webinaires.flatMap((w) => w.data.intervenants.map((
     transition: transform 0.45s ease;
   }
 
-  .tuile:hover .tuile__image :global(img) {
+  a.tuile:hover .tuile__image :global(img) {
     transform: scale(1.04);
   }
 

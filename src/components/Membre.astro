@@ -13,14 +13,15 @@ const { membre, delai = 0 } = Astro.props;
 const photos = import.meta.glob<{ default: ImageMetadata }>('../assets/equipe/*.{jpg,jpeg,png,webp}');
 const chargeur = Object.entries(photos).find(([chemin]) => chemin.includes(`/${membre.id}.`))?.[1];
 const photo = chargeur ? (await chargeur()).default : null;
+const elision = /^[AEIOUH]/i.test(membre.nom) ? 'd’' : 'de ';
 ---
 
 <li class="membre" data-revele style={`--delai:${delai}s`}>
   {
     photo ? (
-      <Photo class="membre__photo forme-a" src={photo} alt={`Portrait de ${membre.nom}`} sizes="(max-width: 620px) 130px, 240px" largeurs={[320, 640]} />
+      <Photo class="membre__photo forme-a" src={photo} alt={`Portrait ${elision}${membre.nom}`} sizes="(max-width: 620px) 130px, (max-width: 1080px) 30vw, 240px" largeurs={[320, 640]} />
     ) : (
-      <svg class="membre__photo membre__provisoire forme-a" viewBox="0 0 100 120" role="img" aria-label={`Photo de ${membre.nom} à venir`}>
+      <svg class="membre__photo membre__provisoire forme-a" viewBox="0 0 100 120" role="img" aria-label={`Photo ${elision}${membre.nom} à venir`}>
         <circle cx="50" cy="52" r="19" />
         <path d="M14 120c0-30 15-44 36-44s36 14 36 44z" />
       </svg>

@@ -30,9 +30,9 @@ export const legal = {
 
 export const chiffres = [
   { valeur: '50+', libelle: 'participants à la première JBAE' },
-  { valeur: '300+', libelle: 'participants cumulés à nos webinaires', accent: true },
-  { valeur: '1 500+', libelle: 'membres et abonnés sur nos canaux' },
-  { valeur: '6', libelle: 'entités partenaires à la JBAE 2025' },
+  { valeur: '700+', libelle: 'participants à nos webinaires', accent: true },
+  { valeur: '2 100+', libelle: 'abonnés et membres sur nos réseaux' },
+  { valeur: '4,27/5', libelle: 'appréciation de nos activités par les participants' },
 ];
 
 export const missions = [
@@ -56,7 +56,7 @@ export const bureau = [
     id: 'abdoul-salam-tankoano',
     nom: 'Abdoul Salam Tankoano',
     poste: 'Président du Bureau Exécutif',
-    parcours: 'Élève ingénieur aérospatial, UIR et IMT Mines Albi',
+    parcours: 'Ingénierie aérospatiale, UIR et IMT',
     mission: 'Porte la vision de l’IBAE, représente l’association et conduit ses relations extérieures.',
   },
   {
@@ -92,14 +92,16 @@ export const bureau = [
 export const coordination = [
   {
     id: 'coordinateur-national',
-    nom: 'Nom à venir',
+    nom: 'Isaac Ouedraogo',
     poste: 'Coordinateur national',
+    parcours: 'Technicien en information de vol d’aérodrome (AFIS), SAFA',
     mission: 'Représente l’IBAE au Burkina Faso, anime l’équipe de terrain et informe le Bureau Exécutif.',
   },
   {
     id: 'coordinateur-national-adjoint',
-    nom: 'Nom à venir',
+    nom: 'Cheick Dera',
     poste: 'Coordinateur national adjoint',
+    parcours: 'Électronique et automatisme, ESTA',
     mission: 'Seconde le coordinateur, suit les démarches administratives et appuie la logistique des événements.',
   },
 ];

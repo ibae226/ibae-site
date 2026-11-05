@@ -56,14 +56,18 @@ const ecrireStock = (cle: string, valeur: string) => {
   const formater = (n: number) => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
   const compter = (el: HTMLElement) => {
     const final = el.textContent ?? '';
-    const cible = Number(final.replace(/[^\d]/g, ''));
-    if (!cible || calme()) return;
-    const suffixe = final.replace(/[\d\s ]/g, '');
+    const morceaux = final.match(/^([\d\s]+)(?:,(\d+))?(.*)$/);
+    if (!morceaux || calme()) return;
+    const [, entier, decimales = '', suffixe] = morceaux;
+    const cible = Number(`${entier.replace(/\D/g, '')}.${decimales || 0}`);
+    if (!cible) return;
+    const afficher = (n: number) =>
+      decimales ? n.toFixed(decimales.length).replace('.', ',') : formater(Math.round(n));
     const debut = performance.now();
     const pas = (t: number) => {
       const p = Math.min((t - debut) / 1400, 1);
       const e = 1 - (1 - p) ** 3;
-      el.textContent = p < 1 ? `${formater(Math.round(cible * e))}${suffixe}` : final;
+      el.textContent = p < 1 ? `${afficher(cible * e)}${suffixe}` : final;
       if (p < 1) requestAnimationFrame(pas);
     };
     requestAnimationFrame(pas);

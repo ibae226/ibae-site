@@ -118,7 +118,13 @@ N'active pas l'option automatique de Web Analytics dans le projet Pages : elle c
 
 ## 8. Publier une modification
 
-Après chaque changement, dans le dossier du site :
+Le dépôt GitHub et Cloudflare Pages sont reliés : tout ce qui arrive sur la branche `main` est construit et mis en ligne automatiquement en 2 à 3 minutes.
+
+1. Modifie le site dans le dossier `ibae-site`.
+2. Double-clique sur `publier.cmd`.
+3. Décris ta modification, puis appuie sur **Entrée**.
+
+Si tu préfères le terminal :
 
 ```
 git add .
@@ -126,7 +132,7 @@ git commit -m "Décris ton changement"
 git push
 ```
 
-Cloudflare republie le site tout seul en quelques minutes.
+Si la construction échoue, l'ancienne version reste en ligne. N'utilise pas **Retry deployment** pour publier : ce bouton relance le commit de la ligne choisie, même s'il est ancien.
 
 ## Avant d'annoncer le site
 
