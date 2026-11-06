@@ -57,35 +57,35 @@ export const bureau = [
     nom: 'Abdoul Salam Tankoano',
     poste: 'Président du Bureau Exécutif',
     parcours: 'Ingénierie aérospatiale, UIR et IMT',
-    mission: 'Porte la vision de l’IBAE, représente l’association et conduit ses relations extérieures.',
+    mission: 'Représente l’association.',
   },
   {
     id: 'salvador-lompo',
     nom: 'Salvador Lompo',
     poste: 'Secrétaire Général',
     parcours: 'Ingénierie aérospatiale, UIR',
-    mission: 'Veille au respect des règles, tient le registre des membres et organise les adhésions.',
+    mission: 'Suit l’administration de l’association.',
   },
   {
     id: 'najma-diarra',
     nom: 'Najma Diarra',
     poste: 'Responsable financière',
     parcours: 'Ingénierie aérospatiale, UIR',
-    mission: 'Gère les comptes et les cotisations, établit le budget et monte les dossiers de financement.',
+    mission: 'Suit les finances de l’association.',
   },
   {
     id: 'philipe-nebie',
     nom: 'Philipe Nebie',
     poste: 'Responsable de la communication',
     parcours: 'Ingénierie aérospatiale, UIR',
-    mission: 'Anime nos réseaux, notre site et notre newsletter, et veille sur notre identité visuelle.',
+    mission: 'Pilote notre communication.',
   },
   {
     id: 'dalil-osee-ouattara',
     nom: 'Dalil Osée Ouattara',
     poste: 'Responsable projets et événements',
     parcours: 'Ingénierie aérospatiale, ISAE-ENSMA',
-    mission: 'Organise les webinaires et la JBAE, et pilote les projets de l’association.',
+    mission: 'Pilote nos projets et nos événements.',
   },
 ];
 
@@ -95,15 +95,22 @@ export const coordination = [
     nom: 'Isaac Ouedraogo',
     poste: 'Coordinateur national',
     parcours: 'Technicien en information de vol d’aérodrome (AFIS), SAFA',
-    mission: 'Représente l’IBAE au Burkina Faso, anime l’équipe de terrain et informe le Bureau Exécutif.',
+    mission: 'Coordonne l’action de l’IBAE au Burkina Faso.',
   },
   {
     id: 'coordinateur-national-adjoint',
     nom: 'Cheick Dera',
     poste: 'Coordinateur national adjoint',
     parcours: 'Électronique et automatisme, ESTA',
-    mission: 'Seconde le coordinateur, suit les démarches administratives et appuie la logistique des événements.',
+    mission: 'Seconde le coordinateur national.',
   },
+];
+
+// Membres de la Coordination nationale rattachés aux départements. La photo suit la même règle que les autres.
+export const coordinationMembres = [
+  { id: 'salomon-obda', nom: 'Salomon Obda', poste: 'Secrétariat général', parcours: 'Étudiant, IBAM' },
+  { id: 'adalou-zouba', nom: 'Adalou Zouba', poste: 'Communication', parcours: 'Élève ingénieur, ENSA Berrechid' },
+  { id: 'corneille-yameogo', nom: 'Corneille Yameogo', poste: 'Communication', parcours: 'Étudiant, IST Ouagadougou' },
 ];
 
 export const partenaires2025 = [

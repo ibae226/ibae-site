@@ -7,7 +7,7 @@ Site officiel de l'Initiative Burkinabè pour l'Aéronautique et l'Espace. Site 
 | Ce que tu veux changer | Où |
 | --- | --- |
 | Email, réseaux, chiffres, missions, partenaires, frise, mentions légales | `src/data/site.ts` |
-| Bureau Exécutif et Coordination nationale | `bureau` et `coordination` dans `src/data/site.ts` |
+| Bureau Exécutif et Coordination nationale | `bureau`, `coordination` et `coordinationMembres` dans `src/data/site.ts` |
 | Métiers, voies d'études, écoles, bourses | `src/data/orientation.ts` |
 | Un webinaire | `src/content/webinaires/` |
 | Une actualité | `src/content/actualites/` |

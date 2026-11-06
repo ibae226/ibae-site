@@ -4,7 +4,7 @@ import EnTete from '../components/EnTete.astro';
 import Fin from '../components/Fin.astro';
 import Photo from '../components/Photo.astro';
 import Membre from '../components/Membre.astro';
-import { bureau, coordination, missions } from '../data/site';
+import { bureau, coordination, coordinationMembres, missions } from '../data/site';
 
 import publicJbae from '../assets/photos/public-jbae.jpg';
 import attestation from '../assets/photos/attestation.jpg';
@@ -164,13 +164,13 @@ const parcours = [
       <div class="conteneur coordination__grille">
         <div class="coordination__texte">
           <h3 class="equipe__groupe">La Coordination nationale</h3>
-          <p>
-            Elle nous donne une présence constante au Burkina Faso : elle relaie nos démarches, appuie nos événements et
-            représente l’association sur le terrain.
-          </p>
+          <p>Elle relaie l’IBAE au Burkina Faso et appuie les départements du Bureau Exécutif.</p>
         </div>
         <ul class="coordination__liste">
           {coordination.map((m, i) => <Membre membre={m} delai={i * 0.07} />)}
+        </ul>
+        <ul class="coordination__membres">
+          {coordinationMembres.map((m, i) => <Membre membre={m} delai={i * 0.07} compact />)}
         </ul>
       </div>
     </div>
@@ -399,6 +399,15 @@ const parcours = [
     grid-template-columns: repeat(2, minmax(0, 236px));
     gap: 24px clamp(16px, 2vw, 28px);
     justify-content: end;
+  }
+
+  .coordination__membres {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px clamp(16px, 2vw, 28px);
+    padding-top: 26px;
+    border-top: 1px solid rgb(14 40 68 / 0.18);
   }
 
   @media (max-width: 1080px) {
